@@ -1,0 +1,10 @@
+[
+  {
+    "text": "This is a quote",
+    "author": "Author One"
+  },
+  {
+    "text": "This is another quote" // Missing comma here!
+    "author": "Author Two" 
+  }
+]
