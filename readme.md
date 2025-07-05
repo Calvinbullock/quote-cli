@@ -8,6 +8,16 @@
 - `./quote-cli`  - run the binary
 
 ## plans -- Stories
+ - TODO: 
+    - [ ] search by keyword
+    - [ ] search by author
+    - [ ] Combine Filters (EX: use both --tag and --author search)
+    - [ ] add single letter flags (-a = --author, -t = --tag, etc)
+    - [ ] limit the total print count (`--limit <number>`)
+    - [ ] add / delete a quote
+        - [ ] print all quotes with an ID?
+    - [ ] different outputs to terminal (basic, json, csv, etc)
+
 - TDD - TEST DRIVEN!! FROM THE START
 - a program that display's a quote every time I start a terminal or with a cmd and can add new ones with cli tool
     - nice formatting (when printing)
