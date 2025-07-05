@@ -7,8 +7,9 @@ import (
 )
 
 type Quote struct {
-	Text   string `json:"text"`
-	Author string `json:"author"`
+	Text   	string 	 `json:"text"`
+	Author 	string 	 `json:"author"`
+	Tags	[]string `json:"tags"`
 }
 
 // LoadQuotesFromFile reads a JSON file from the given filepath,

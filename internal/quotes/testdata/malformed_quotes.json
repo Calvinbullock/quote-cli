@@ -1,10 +1,12 @@
 [
   {
     "text": "This is a quote",
-    "author": "Author One"
+    "author": "Author One",
+    "tags": ["malformed", "example"]
   },
   {
     "text": "This is another quote" // Missing comma here!
-    "author": "Author Two" 
+    "author": "Author Two",
+    "tags": []
   }
 ]
