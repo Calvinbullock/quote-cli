@@ -12,10 +12,10 @@ import (
 
 // displayQuote prints the quote to the console.
 func displayQuote(quote quotes.Quote) {
-	fmt.Println("--- Your Daily Dose of Wisdom ---")
+	fmt.Println("")
 	fmt.Printf("“%s”\n", quote.Text)
 	fmt.Printf("  - %s\n", quote.Author)
-	fmt.Println("---------------------------------")
+	fmt.Println("")
 }
 
 func main() {
@@ -29,7 +29,7 @@ func main() {
 	// Handle Flags
 	if *versionFlag {
 		fmt.Printf("Quote CLI Version: %s\n", appVersion)
-		return // Exit after printing version
+		return
 	}
 
 	// Load Quotes
@@ -38,7 +38,7 @@ func main() {
 		log.Fatalf("Error loading quotes: %v", err)
 	}
 
-	// Display Rand Quote
+	// Display Rand Quote -- default run function
 	randomInt := rand.Intn(len(quotes))
 	displayQuote(quotes[randomInt])
 }
