@@ -33,7 +33,8 @@ func displayQuote(quote quotes.Quote) {
 func main() {
 	// Define Command-Line Flags
 	quotesFilePath := flag.String("file", "_assets/default.json", "Path to the quotes file")
-	quotesTagSearch := flag.String("tag", "", "Tag to search quotes for")
+	quotesTagSearch := flag.String("tag", "", "Tag to search quotes by tags")
+	quotesAuthorSearch := flag.String("author", "", "Tag to search quotes by author")
 	versionFlag := flag.Bool("version", false, "Print application version")
 	flag.Parse() // Parse the flags
 
@@ -58,6 +59,15 @@ func main() {
 			log.Fatalf("Error with search: %v", err)
 		}
 		displayQuoteList(foundQuotes)
+
+	} else if *quotesAuthorSearch != "" {
+		// Handle Author search
+		foundQuotes, err := quotes.SearchByQuoteAuthor(quoteList, *quotesAuthorSearch)
+		if err != nil {
+			log.Fatalf("Error with search: %v", err)
+		}
+		displayQuoteList(foundQuotes)
+
 	} else {
 		// Display Random Quote
 		randomInt := rand.Intn(len(quoteList))

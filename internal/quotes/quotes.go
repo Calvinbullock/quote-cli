@@ -46,6 +46,36 @@ func SearchByQuoteTag(quotes []Quote, targetTag string) ([]Quote, error) {
 	return matchingQuotes, nil
 }
 
+// SearchByQuoteAuthor filters a slice of quotes, returning only those written by
+// the specified author. The search is case-insensitive and ignores leading/trailing
+// whitespace on the authorName.
+//
+// If the processed authorName is empty, or if no matching quotes are found,
+// an empty (non-nil) slice of quotes is returned along with a nil error.
+// Errors are reserved for unexpected issues during the search process itself.
+func SearchByQuoteAuthor(quotes []Quote, authorName string) ([]Quote, error) {
+	var matchingQuotes []Quote
+	processedAuthorName := strings.ToLower(strings.TrimSpace(authorName))
+
+	// return quick if empty author
+	if processedAuthorName == "" {
+		return []Quote{}, nil
+	}
+
+	// compare author and targetAuthor
+	for _, quote := range quotes {
+		if strings.ToLower(quote.Author) == processedAuthorName {
+			matchingQuotes = append(matchingQuotes, quote)
+		}
+	}
+
+	if len(matchingQuotes) == 0 {
+		return []Quote{}, nil
+	}
+
+	return matchingQuotes, nil
+}
+
 // LoadQuotesFromFile reads a JSON file from the given filepath,
 // parses its content, and returns a slice of Quote structs.
 //

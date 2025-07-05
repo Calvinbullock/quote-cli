@@ -164,6 +164,194 @@ func TestSearchByQuoteTag(t *testing.T) {
 	}
 }
 
+// TestSearchByQuoteAuthor tests the SearchByQuoteAuthor function.
+func TestSearchByQuoteAuthor(t *testing.T) {
+	// Define a set of sample quotes to use across test cases.
+	// This can be the same set used for TestSearchByQuoteTag.
+	sampleQuotes := []Quote{
+		{
+			Text:   "The only way to do great work is to love what you do.",
+			Author: "Steve Jobs",
+			Tags:   []string{"inspiration", "work", "passion"},
+		},
+		{
+			Text:   "Be yourself; everyone else is already taken.",
+			Author: "Oscar Wilde",
+			Tags:   []string{"identity", "humor"},
+		},
+		{
+			Text:   "The future belongs to those who believe in the beauty of their dreams.",
+			Author: "Eleanor Roosevelt",
+			Tags:   []string{"future", "dreams", "inspiration"},
+		},
+		{
+			Text:   "Innovation distinguishes between a leader and a follower.",
+			Author: "Steve Jobs",
+			Tags:   []string{"innovation", "leadership", "work"},
+		},
+		{
+			Text:   "To be or not to be, that is the question.",
+			Author: "William Shakespeare",
+			Tags:   []string{"philosophy", "drama"},
+		},
+		{
+			Text:   "All the world's a stage, and all the men and women merely players.",
+			Author: "William Shakespeare",
+			Tags:   []string{"philosophy", "life"},
+		},
+	}
+
+	// Define test cases. Each test case has a name, input, and expected output.
+	tests := []struct {
+		name           string
+		quotes         []Quote
+		authorName     string
+		expectedQuotes []Quote
+		expectedError  error
+	}{
+		{
+			name:       "Find single matching quote by author",
+			quotes:     sampleQuotes,
+			authorName: "Oscar Wilde",
+			expectedQuotes: []Quote{
+				{
+					Text:   "Be yourself; everyone else is already taken.",
+					Author: "Oscar Wilde",
+					Tags:   []string{"identity", "humor"},
+				},
+			},
+			expectedError: nil,
+		},
+		{
+			name:       "Find multiple matching quotes by author",
+			quotes:     sampleQuotes,
+			authorName: "Steve Jobs",
+			expectedQuotes: []Quote{
+				{
+					Text:   "The only way to do great work is to love what you do.",
+					Author: "Steve Jobs",
+					Tags:   []string{"inspiration", "work", "passion"},
+				},
+				{
+					Text:   "Innovation distinguishes between a leader and a follower.",
+					Author: "Steve Jobs",
+					Tags:   []string{"innovation", "leadership", "work"},
+				},
+			},
+			expectedError: nil,
+		},
+		{
+			name:       "Find multiple matching quotes by author (another example)",
+			quotes:     sampleQuotes,
+			authorName: "William Shakespeare",
+			expectedQuotes: []Quote{
+				{
+					Text:   "To be or not to be, that is the question.",
+					Author: "William Shakespeare",
+					Tags:   []string{"philosophy", "drama"},
+				},
+				{
+					Text:   "All the world's a stage, and all the men and women merely players.",
+					Author: "William Shakespeare",
+					Tags:   []string{"philosophy", "life"},
+				},
+			},
+			expectedError: nil,
+		},
+		{
+			name:           "No matching quotes by author",
+			quotes:         sampleQuotes,
+			authorName:     "NonExistent Author",
+			expectedQuotes: []Quote{}, // Expect an empty slice
+			expectedError:  nil,
+		},
+		{
+			name:       "Case insensitive search for author",
+			quotes:     sampleQuotes,
+			authorName: "steve jobs", // Lowercase input
+			expectedQuotes: []Quote{
+				{
+					Text:   "The only way to do great work is to love what you do.",
+					Author: "Steve Jobs",
+					Tags:   []string{"inspiration", "work", "passion"},
+				},
+				{
+					Text:   "Innovation distinguishes between a leader and a follower.",
+					Author: "Steve Jobs",
+					Tags:   []string{"innovation", "leadership", "work"},
+				},
+			},
+			expectedError: nil,
+		},
+		{
+			name:       "Case insensitive search for author (mixed case input)",
+			quotes:     sampleQuotes,
+			authorName: "OsCaR wIlDe", // Mixed case input
+			expectedQuotes: []Quote{
+				{
+					Text:   "Be yourself; everyone else is already taken.",
+					Author: "Oscar Wilde",
+					Tags:   []string{"identity", "humor"},
+				},
+			},
+			expectedError: nil,
+		},
+		{
+			name:       "Author name with leading/trailing spaces",
+			quotes:     sampleQuotes,
+			authorName: "  Steve Jobs  ", // Spaces around the name
+			expectedQuotes: []Quote{
+				{
+					Text:   "The only way to do great work is to love what you do.",
+					Author: "Steve Jobs",
+					Tags:   []string{"inspiration", "work", "passion"},
+				},
+				{
+					Text:   "Innovation distinguishes between a leader and a follower.",
+					Author: "Steve Jobs",
+					Tags:   []string{"innovation", "leadership", "work"},
+				},
+			},
+			expectedError: nil,
+		},
+		{
+			name:           "Empty input quotes slice",
+			quotes:         []Quote{}, // Empty slice of quotes
+			authorName:     "Any Author",
+			expectedQuotes: []Quote{},
+			expectedError:  nil,
+		},
+		{
+			name:           "Empty author name", // Searching for an empty author name
+			quotes:         sampleQuotes,
+			authorName:     "",
+			expectedQuotes: []Quote{}, // Expect an empty slice
+			expectedError:  nil,
+		},
+	}
+
+	// Iterate over each test case.
+	for _, tt := range tests {
+		// Run each test case as a subtest.
+		t.Run(tt.name, func(t *testing.T) {
+			// Call the function being tested.
+			actualQuotes, actualError := SearchByQuoteAuthor(tt.quotes, tt.authorName)
+
+			// Check for errors.
+			if actualError != tt.expectedError {
+				t.Errorf("SearchByQuoteAuthor() error = %v, wantErr %v", actualError, tt.expectedError)
+				return
+			}
+
+			// Compare the actual returned quotes with the expected quotes.
+			// reflect.DeepEqual is used for comparing slices of structs.
+			if !reflect.DeepEqual(actualQuotes, tt.expectedQuotes) {
+				t.Errorf("SearchByQuoteAuthor() got = %v, want %v", actualQuotes, tt.expectedQuotes)
+			}
+		})
+	}
+}
+
 //				Test - LoadQuotesFromFile
 // ====================================================== \\
 
