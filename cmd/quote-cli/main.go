@@ -10,7 +10,7 @@ import (
 	//"quote-cli/internal/display"
 )
 
-// display a list of quotes
+// displayQuoteList prints a list of quotes to the console.
 func displayQuoteList(quoteList []quotes.Quote) {
 	for _, quote := range quoteList {
 		displayQuote(quote)
