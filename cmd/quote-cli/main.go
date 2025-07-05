@@ -21,7 +21,12 @@ func displayQuoteList(quoteList []quotes.Quote) {
 func displayQuote(quote quotes.Quote) {
 	fmt.Println("")
 	fmt.Printf("“%s”\n", quote.Text)
-	fmt.Printf("  - %s\n", quote.Author)
+
+	if quote.Author == "" {
+		fmt.Printf("  - ? \n")
+	} else {
+		fmt.Printf("  - %s\n", quote.Author)
+	}
 	fmt.Println("")
 }
 
