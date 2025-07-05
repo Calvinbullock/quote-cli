@@ -9,14 +9,173 @@ import (
 	"testing"
 )
 
+
+//				Test - SearchByQuoteTag
+// ====================================================== \\
+
+// TestSearchByQuoteTag tests the SearchByQuoteTag function.
+func TestSearchByQuoteTag(t *testing.T) {
+	// Define a set of sample quotes to use across test cases.
+	sampleQuotes := []Quote{
+		{
+			Text:   "The only way to do great work is to love what you do.",
+			Author: "Steve Jobs",
+			Tags:   []string{"inspiration", "work", "passion"},
+		},
+		{
+			Text:   "Be yourself; everyone else is already taken.",
+			Author: "Oscar Wilde",
+			Tags:   []string{"identity", "humor"},
+		},
+		{
+			Text:   "The future belongs to those who believe in the beauty of their dreams.",
+			Author: "Eleanor Roosevelt",
+			Tags:   []string{"future", "dreams", "inspiration"},
+		},
+		{
+			Text:   "Innovation distinguishes between a leader and a follower.",
+			Author: "Steve Jobs",
+			Tags:   []string{"innovation", "leadership", "work"},
+		},
+		{
+			Text:   "To be or not to be, that is the question.",
+			Author: "William Shakespeare",
+			Tags:   []string{"philosophy", "drama"},
+		},
+	}
+
+	// Define test cases. Each test case has a name, input, and expected output.
+	tests := []struct {
+		name          string
+		quotes        []Quote
+		targetTag     string
+		expectedQuotes []Quote
+		expectedError error // Placeholder for error handling, though current func doesn't return errors
+	}{
+		{
+			name:      "Find single matching quote",
+			quotes:    sampleQuotes,
+			targetTag: "humor",
+			expectedQuotes: []Quote{
+				{
+					Text:   "Be yourself; everyone else is already taken.",
+					Author: "Oscar Wilde",
+					Tags:   []string{"identity", "humor"},
+				},
+			},
+			expectedError: nil,
+		},
+		{
+			name:      "Find multiple matching quotes",
+			quotes:    sampleQuotes,
+			targetTag: "inspiration",
+			expectedQuotes: []Quote{
+				{
+					Text:   "The only way to do great work is to love what you do.",
+					Author: "Steve Jobs",
+					Tags:   []string{"inspiration", "work", "passion"},
+				},
+				{
+					Text:   "The future belongs to those who believe in the beauty of their dreams.",
+					Author: "Eleanor Roosevelt",
+					Tags:   []string{"future", "dreams", "inspiration"},
+				},
+			},
+			expectedError: nil,
+		},
+		{
+			name:      "No matching quotes",
+			quotes:    sampleQuotes,
+			targetTag: "nonexistent",
+			expectedQuotes: []Quote{}, // Expect an empty slice
+			expectedError: nil,
+		},
+		{
+			name:      "Case in-sensitive search",
+			quotes:    sampleQuotes,
+			targetTag: "Inspiration",
+			expectedQuotes: []Quote{
+				{
+					Text:   "The only way to do great work is to love what you do.",
+					Author: "Steve Jobs",
+					Tags:   []string{"inspiration", "work", "passion"},
+				},
+				{
+					Text:   "The future belongs to those who believe in the beauty of their dreams.",
+					Author: "Eleanor Roosevelt",
+					Tags:   []string{"future", "dreams", "inspiration"},
+				},
+			},
+			expectedError: nil,
+		},
+		{
+			name:      "Empty input quotes slice",
+			quotes:    []Quote{}, // Empty slice of quotes
+			targetTag: "work",
+			expectedQuotes: []Quote{},
+			expectedError: nil,
+		},
+		{
+			name:      "Empty target tag", // Searching for an empty tag
+			quotes:    sampleQuotes,
+			targetTag: "",
+			expectedQuotes: []Quote{}, // Assuming an empty tag won't match anything
+			expectedError: nil,
+		},
+		{
+			name:      "Quote with multiple tags, one matches",
+			quotes:    []Quote{
+				{
+					Text:   "Test quote",
+					Author: "Tester",
+					Tags:   []string{"tag1", "tag2", "tag3"},
+				},
+			},
+			targetTag: "tag2",
+			expectedQuotes: []Quote{
+				{
+					Text:   "Test quote",
+					Author: "Tester",
+					Tags:   []string{"tag1", "tag2", "tag3"},
+				},
+			},
+			expectedError: nil,
+		},
+	}
+
+	// Iterate over each test case.
+	for _, tt := range tests {
+		// Run each test case as a subtest. This helps in organizing test output.
+		t.Run(tt.name, func(t *testing.T) {
+			// Call the function being tested.
+			actualQuotes, actualError := SearchByQuoteTag(tt.quotes, tt.targetTag)
+
+			// Check for errors.
+			if actualError != tt.expectedError {
+				t.Errorf("SearchByQuoteTag() \nerror   = %v, \nwantErr = %v", actualError, tt.expectedError)
+				return // Stop if error expectation is not met
+			}
+
+			// Compare the actual returned quotes with the expected quotes.
+			// reflect.DeepEqual is used for comparing slices of structs.
+			if !reflect.DeepEqual(actualQuotes, tt.expectedQuotes) {
+				t.Errorf("SearchByQuoteTag() \ngot  = %v, \nwant = %v", actualQuotes, tt.expectedQuotes)
+			}
+		})
+	}
+}
+
+//				Test - LoadQuotesFromFile
+// ====================================================== \\
+
 // TestLoadQuotesFromFile_Success ... (unchanged)
 func TestLoadQuotesFromFile_Success(t *testing.T) {
 	tempDir := t.TempDir()
 	testFilePath := filepath.Join(tempDir, "valid_quotes.json")
 
 	validJSON := `[
-		{"text": "Test Quote 1", "author": "Test Author 1"},
-		{"text": "Test Quote 2", "author": "Test Author 2"}
+	{"text": "Test Quote 1", "author": "Test Author 1"},
+	{"text": "Test Quote 2", "author": "Test Author 2"}
 	]`
 	err := os.WriteFile(testFilePath, []byte(validJSON), 0644)
 	if err != nil {

@@ -4,12 +4,46 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
 type Quote struct {
 	Text   	string 	 `json:"text"`
 	Author 	string 	 `json:"author"`
 	Tags	[]string `json:"tags"`
+}
+
+// SearchByQuoteTag filters a slice of quotes, returning only those that contain
+// the specified targetTag. The search is case-insensitive and ignores leading/trailing
+// whitespace on the targetTag.
+//
+// If the processed targetTag is empty, or if no matching quotes are found,
+// an empty (non-nil) slice of quotes is returned along with a nil error.
+// Errors are reserved for unexpected issues during the search process itself.
+func SearchByQuoteTag(quotes []Quote, targetTag string) ([]Quote, error) {
+	var matchingQuotes []Quote
+	processedTargetTag := strings.ToLower(strings.TrimSpace(targetTag))
+
+	// return quick if empty tag
+	if processedTargetTag == "" {
+		return []Quote{}, nil
+	}
+
+	// compare tag and targetTag
+	for _, quote := range quotes {
+		for _, quoteTag := range quote.Tags {
+			if strings.ToLower(quoteTag) == processedTargetTag {
+				matchingQuotes = append(matchingQuotes, quote)
+				break
+			}
+		}
+	}
+
+	if len(matchingQuotes) == 0 {
+		return []Quote{}, nil
+	}
+
+	return matchingQuotes, nil
 }
 
 // LoadQuotesFromFile reads a JSON file from the given filepath,
@@ -23,6 +57,8 @@ type Quote struct {
 //   - The file content is not valid JSON or cannot be unmarshaled into []Quote.
 //   - The JSON file is valid but contains an empty array.
 func LoadQuotesFromFile(filepath string) ([]Quote, error) {
+	// TODO: change tag slices to maps for quick look ups?
+
 	// Read the entire file content
 	data, err := os.ReadFile(filepath)
 	if err != nil {
