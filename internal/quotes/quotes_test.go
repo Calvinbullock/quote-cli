@@ -9,7 +9,6 @@ import (
 	"testing"
 )
 
-
 //				Test - SearchByQuoteTag
 // ====================================================== \\
 
@@ -46,11 +45,11 @@ func TestSearchByQuoteTag(t *testing.T) {
 
 	// Define test cases. Each test case has a name, input, and expected output.
 	tests := []struct {
-		name          string
-		quotes        []Quote
-		targetTag     string
+		name           string
+		quotes         []Quote
+		targetTag      string
 		expectedQuotes []Quote
-		expectedError error // Placeholder for error handling, though current func doesn't return errors
+		expectedError  error // Placeholder for error handling, though current func doesn't return errors
 	}{
 		{
 			name:      "Find single matching quote",
@@ -84,11 +83,11 @@ func TestSearchByQuoteTag(t *testing.T) {
 			expectedError: nil,
 		},
 		{
-			name:      "No matching quotes",
-			quotes:    sampleQuotes,
-			targetTag: "nonexistent",
+			name:           "No matching quotes",
+			quotes:         sampleQuotes,
+			targetTag:      "nonexistent",
 			expectedQuotes: []Quote{}, // Expect an empty slice
-			expectedError: nil,
+			expectedError:  nil,
 		},
 		{
 			name:      "Case in-sensitive search",
@@ -109,22 +108,22 @@ func TestSearchByQuoteTag(t *testing.T) {
 			expectedError: nil,
 		},
 		{
-			name:      "Empty input quotes slice",
-			quotes:    []Quote{}, // Empty slice of quotes
-			targetTag: "work",
+			name:           "Empty input quotes slice",
+			quotes:         []Quote{}, // Empty slice of quotes
+			targetTag:      "work",
 			expectedQuotes: []Quote{},
-			expectedError: nil,
+			expectedError:  nil,
 		},
 		{
-			name:      "Empty target tag", // Searching for an empty tag
-			quotes:    sampleQuotes,
-			targetTag: "",
+			name:           "Empty target tag", // Searching for an empty tag
+			quotes:         sampleQuotes,
+			targetTag:      "",
 			expectedQuotes: []Quote{}, // Assuming an empty tag won't match anything
-			expectedError: nil,
+			expectedError:  nil,
 		},
 		{
-			name:      "Quote with multiple tags, one matches",
-			quotes:    []Quote{
+			name: "Quote with multiple tags, one matches",
+			quotes: []Quote{
 				{
 					Text:   "Test quote",
 					Author: "Tester",
@@ -228,8 +227,8 @@ func TestLoadQuotesFromFile_EmptyQuotesArray(t *testing.T) {
 	if quotes != nil {
 		t.Errorf("LoadQuotesFromFile expected nil quotes for empty array, but got: %+v", quotes)
 	}
-	if err.Error() != `no quotes found in "` + testFilePath + `"` {
-		t.Errorf("Unexpected error message for empty quotes. Got: %q, Want: %q", err.Error(), `no quotes found in "` + testFilePath + `"`)
+	if err.Error() != `no quotes found in "`+testFilePath+`"` {
+		t.Errorf("Unexpected error message for empty quotes. Got: %q, Want: %q", err.Error(), `no quotes found in "`+testFilePath+`"`)
 	}
 }
 

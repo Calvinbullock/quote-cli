@@ -8,9 +8,9 @@ import (
 )
 
 type Quote struct {
-	Text   	string 	 `json:"text"`
-	Author 	string 	 `json:"author"`
-	Tags	[]string `json:"tags"`
+	Text   string   `json:"text"`
+	Author string   `json:"author"`
+	Tags   []string `json:"tags"`
 }
 
 // SearchByQuoteTag filters a slice of quotes, returning only those that contain
