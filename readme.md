@@ -4,8 +4,8 @@
 - `go run ./cmd/quote-cli` - for production
 
 #### Manuel Build / run
-- `go build`    - build the binary
-- `./qouteCli`  - run the binary
+- `go build -o quote-cli ./cmd/quote-cli` - build the binary
+- `./quote-cli`  - run the binary
 
 ## plans -- Stories
 - TDD - TEST DRIVEN!! FROM THE START
