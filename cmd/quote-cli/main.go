@@ -48,7 +48,7 @@ func main() {
 	// version
 	flag.BoolVar(&versionFlag, "version", false, "Print application version")
 	flag.BoolVar(&versionFlag, "v", false, "Print application version")
-	flag.Parse() // Parse the flags
+	flag.Parse()
 
 	const appVersion = "1.0.0"
 
