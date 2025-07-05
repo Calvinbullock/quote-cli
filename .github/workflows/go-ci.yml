@@ -11,8 +11,31 @@ on:
       - main
 
 jobs:
-  test:
+  fmt: # New job for gofmt
     runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go environment
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.22'
+
+    - name: Check Go formatting
+      run: |
+        echo "Checking gofmt with -s -d ."
+        diff=$(gofmt -s -d .)
+        if [ -n "$diff" ]; then
+          echo "Go code is not gofmt-ed. Please run 'gofmt -s -w .' on your code."
+          echo "$diff"
+          exit 1
+        fi
+        echo "All Go files are gofmt-ed."
+
+  test: # Existing test job, now depends on fmt
+    runs-on: ubuntu-latest
+    needs: fmt
 
     steps:
     - name: Checkout code
