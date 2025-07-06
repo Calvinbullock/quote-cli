@@ -32,7 +32,6 @@ func displayQuote(quote quotes.Quote) {
 
 func main() {
 	// Define Command-Line Flags
-
 	var quotesFilePath string
 	var quotesTagSearch string
 	var quotesAuthorSearch string
