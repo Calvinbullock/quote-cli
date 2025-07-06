@@ -46,16 +46,15 @@ func TestSearchByQuoteTag(t *testing.T) {
 
 	// Define test cases. Each test case has a name, input, and expected output.
 	tests := []struct {
-		name           string
-		quotes         []Quote
-		targetTag      string
+		name         string
+		quotes       []Quote
+		targetTag    string
 		expectedQuotes []Quote
-		expectedError  error // Placeholder for error handling, though current func doesn't return errors
 	}{
 		{
-			name:      "Find single matching quote",
-			quotes:    sampleQuotes,
-			targetTag: "humor",
+			name:         "Find single matching quote",
+			quotes:       sampleQuotes,
+			targetTag:    "humor",
 			expectedQuotes: []Quote{
 				{
 					Text:   "Be yourself; everyone else is already taken.",
@@ -63,12 +62,11 @@ func TestSearchByQuoteTag(t *testing.T) {
 					Tags:   []string{"identity", "humor"},
 				},
 			},
-			expectedError: nil,
 		},
 		{
-			name:      "Find multiple matching quotes",
-			quotes:    sampleQuotes,
-			targetTag: "inspiration",
+			name:         "Find multiple matching quotes",
+			quotes:       sampleQuotes,
+			targetTag:    "inspiration",
 			expectedQuotes: []Quote{
 				{
 					Text:   "The only way to do great work is to love what you do.",
@@ -81,19 +79,17 @@ func TestSearchByQuoteTag(t *testing.T) {
 					Tags:   []string{"future", "dreams", "inspiration"},
 				},
 			},
-			expectedError: nil,
 		},
 		{
-			name:           "No matching quotes",
-			quotes:         sampleQuotes,
-			targetTag:      "nonexistent",
+			name:         "No matching quotes",
+			quotes:       sampleQuotes,
+			targetTag:    "nonexistent",
 			expectedQuotes: emptyQuoteList,
-			expectedError:  nil,
 		},
 		{
-			name:      "Case in-sensitive search",
-			quotes:    sampleQuotes,
-			targetTag: "Inspiration",
+			name:         "Case in-sensitive search",
+			quotes:       sampleQuotes,
+			targetTag:    "Inspiration",
 			expectedQuotes: []Quote{
 				{
 					Text:   "The only way to do great work is to love what you do.",
@@ -106,21 +102,18 @@ func TestSearchByQuoteTag(t *testing.T) {
 					Tags:   []string{"future", "dreams", "inspiration"},
 				},
 			},
-			expectedError: nil,
 		},
 		{
-			name:           "Empty input quotes slice",
-			quotes:         emptyQuoteList,
-			targetTag:      "work",
+			name:         "Empty input quotes slice",
+			quotes:       emptyQuoteList,
+			targetTag:    "work",
 			expectedQuotes: emptyQuoteList,
-			expectedError:  nil,
 		},
 		{
-			name:           "Empty target tag", // Searching for an empty tag
-			quotes:         sampleQuotes,
-			targetTag:      "",
+			name:         "Empty target tag", // Searching for an empty tag
+			quotes:       sampleQuotes,
+			targetTag:    "",
 			expectedQuotes: emptyQuoteList,
-			expectedError:  nil,
 		},
 		{
 			name: "Quote with multiple tags, one matches",
@@ -139,7 +132,6 @@ func TestSearchByQuoteTag(t *testing.T) {
 					Tags:   []string{"tag1", "tag2", "tag3"},
 				},
 			},
-			expectedError: nil,
 		},
 	}
 
@@ -148,18 +140,12 @@ func TestSearchByQuoteTag(t *testing.T) {
 		// Run each test case as a subtest. This helps in organizing test output.
 		t.Run(tt.name, func(t *testing.T) {
 			// Call the function being tested.
-			actualQuotes, actualError := SearchByQuoteTag(tt.quotes, tt.targetTag)
-
-			// Check for errors.
-			if actualError != tt.expectedError {
-				t.Errorf("SearchByQuoteTag() \nerror   = %v, \nwantErr = %v", actualError, tt.expectedError)
-				return // Stop if error expectation is not met
-			}
+			actualQuotes := SearchByQuoteTag(tt.quotes, tt.targetTag)
 
 			// Compare the actual returned quotes with the expected quotes.
 			// reflect.DeepEqual is used for comparing slices of structs.
 			if !reflect.DeepEqual(actualQuotes, tt.expectedQuotes) {
-				t.Errorf("SearchByQuoteTag() \ngot  = %v, \nwant = %v", actualQuotes, tt.expectedQuotes)
+				t.Errorf("SearchByQuoteTag() \ngot  = %v, \nwant = %v", actualQuotes, tt.expectedQuotes)
 			}
 		})
 	}
@@ -205,16 +191,15 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 
 	// Define test cases. Each test case has a name, input, and expected output.
 	tests := []struct {
-		name           string
-		quotes         []Quote
-		authorName     string
+		name         string
+		quotes       []Quote
+		authorName   string
 		expectedQuotes []Quote
-		expectedError  error
 	}{
 		{
-			name:       "Find single matching quote by author",
-			quotes:     sampleQuotes,
-			authorName: "Oscar Wilde",
+			name:         "Find single matching quote by author",
+			quotes:       sampleQuotes,
+			authorName:   "Oscar Wilde",
 			expectedQuotes: []Quote{
 				{
 					Text:   "Be yourself; everyone else is already taken.",
@@ -222,12 +207,11 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 					Tags:   []string{"identity", "humor"},
 				},
 			},
-			expectedError: nil,
 		},
 		{
-			name:       "Find multiple matching quotes by author",
-			quotes:     sampleQuotes,
-			authorName: "Steve Jobs",
+			name:         "Find multiple matching quotes by author",
+			quotes:       sampleQuotes,
+			authorName:   "Steve Jobs",
 			expectedQuotes: []Quote{
 				{
 					Text:   "The only way to do great work is to love what you do.",
@@ -240,12 +224,11 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 					Tags:   []string{"innovation", "leadership", "work"},
 				},
 			},
-			expectedError: nil,
 		},
 		{
-			name:       "Find multiple matching quotes by author (another example)",
-			quotes:     sampleQuotes,
-			authorName: "William Shakespeare",
+			name:         "Find multiple matching quotes by author (another example)",
+			quotes:       sampleQuotes,
+			authorName:   "William Shakespeare",
 			expectedQuotes: []Quote{
 				{
 					Text:   "To be or not to be, that is the question.",
@@ -258,19 +241,17 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 					Tags:   []string{"philosophy", "life"},
 				},
 			},
-			expectedError: nil,
 		},
 		{
-			name:           "No matching quotes by author",
-			quotes:         sampleQuotes,
-			authorName:     "NonExistent Author",
+			name:         "No matching quotes by author",
+			quotes:       sampleQuotes,
+			authorName:   "NonExistent Author",
 			expectedQuotes: emptyQuoteList,
-			expectedError:  nil,
 		},
 		{
-			name:       "Case insensitive search for author",
-			quotes:     sampleQuotes,
-			authorName: "steve jobs", // Lowercase input
+			name:         "Case insensitive search for author",
+			quotes:       sampleQuotes,
+			authorName:   "steve jobs", // Lowercase input
 			expectedQuotes: []Quote{
 				{
 					Text:   "The only way to do great work is to love what you do.",
@@ -283,12 +264,11 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 					Tags:   []string{"innovation", "leadership", "work"},
 				},
 			},
-			expectedError: nil,
 		},
 		{
-			name:       "Case insensitive search for author (mixed case input)",
-			quotes:     sampleQuotes,
-			authorName: "OsCaR wIlDe", // Mixed case input
+			name:         "Case insensitive search for author (mixed case input)",
+			quotes:       sampleQuotes,
+			authorName:   "OsCaR wIlDe", // Mixed case input
 			expectedQuotes: []Quote{
 				{
 					Text:   "Be yourself; everyone else is already taken.",
@@ -296,12 +276,11 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 					Tags:   []string{"identity", "humor"},
 				},
 			},
-			expectedError: nil,
 		},
 		{
-			name:       "Author name with leading/trailing spaces",
-			quotes:     sampleQuotes,
-			authorName: "  Steve Jobs  ", // Spaces around the name
+			name:         "Author name with leading/trailing spaces",
+			quotes:       sampleQuotes,
+			authorName:   "  Steve Jobs  ", // Spaces around the name
 			expectedQuotes: []Quote{
 				{
 					Text:   "The only way to do great work is to love what you do.",
@@ -314,21 +293,18 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 					Tags:   []string{"innovation", "leadership", "work"},
 				},
 			},
-			expectedError: nil,
 		},
 		{
-			name:           "Empty input quotes slice",
-			quotes:         emptyQuoteList,
-			authorName:     "Any Author",
+			name:         "Empty input quotes slice",
+			quotes:       emptyQuoteList,
+			authorName:   "Any Author",
 			expectedQuotes: emptyQuoteList,
-			expectedError:  nil,
 		},
 		{
-			name:           "Empty author name", // Searching for an empty author name
-			quotes:         sampleQuotes,
-			authorName:     "",
+			name:         "Empty author name", // Searching for an empty author name
+			quotes:       sampleQuotes,
+			authorName:   "",
 			expectedQuotes: emptyQuoteList,
-			expectedError:  nil,
 		},
 	}
 
@@ -337,23 +313,16 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 		// Run each test case as a subtest.
 		t.Run(tt.name, func(t *testing.T) {
 			// Call the function being tested.
-			actualQuotes, actualError := SearchByQuoteAuthor(tt.quotes, tt.authorName)
-
-			// Check for errors.
-			if actualError != tt.expectedError {
-				t.Errorf("SearchByQuoteAuthor() \nerror = %v, \nwantErr %v", actualError, tt.expectedError)
-				return
-			}
+			actualQuotes := SearchByQuoteAuthor(tt.quotes, tt.authorName)
 
 			// Compare the actual returned quotes with the expected quotes.
 			// reflect.DeepEqual is used for comparing slices of structs.
 			if !reflect.DeepEqual(actualQuotes, tt.expectedQuotes) {
-				t.Errorf("SearchByQuoteAuthor() \ngot  = %v, \nwant = %v", actualQuotes, tt.expectedQuotes)
+				t.Errorf("SearchByQuoteAuthor() \ngot  = %v, \nwant = %v", actualQuotes, tt.expectedQuotes)
 			}
 		})
 	}
 }
-
 //				Test - LoadQuotesFromFile
 // ====================================================== \\
 

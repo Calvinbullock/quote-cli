@@ -18,15 +18,14 @@ type Quote struct {
 // whitespace on the targetTag.
 //
 // If the processed targetTag is empty, or if no matching quotes are found,
-// an empty (non-nil) slice of quotes is returned along with a nil error.
-// Errors are reserved for unexpected issues during the search process itself.
-func SearchByQuoteTag(quotes []Quote, targetTag string) ([]Quote, error) {
+// an empty (non-nil) slice of quotes is returned
+func SearchByQuoteTag(quotes []Quote, targetTag string) []Quote {
 	var matchingQuotes []Quote
 	targetTag = strings.ToLower(strings.TrimSpace(targetTag))
 
 	// return quick if empty tag
 	if targetTag == "" {
-		return matchingQuotes, nil
+		return matchingQuotes
 	}
 
 	// compare tag and targetTag
@@ -39,7 +38,7 @@ func SearchByQuoteTag(quotes []Quote, targetTag string) ([]Quote, error) {
 		}
 	}
 
-	return matchingQuotes, nil
+	return matchingQuotes
 }
 
 // SearchByQuoteAuthor filters a slice of quotes, returning only those written by
@@ -47,15 +46,14 @@ func SearchByQuoteTag(quotes []Quote, targetTag string) ([]Quote, error) {
 // whitespace on the authorName.
 //
 // If the processed authorName is empty, or if no matching quotes are found,
-// an empty (non-nil) slice of quotes is returned along with a nil error.
-// Errors are reserved for unexpected issues during the search process itself.
-func SearchByQuoteAuthor(quotes []Quote, authorName string) ([]Quote, error) {
+// an empty (non-nil) slice of quotes is returned
+func SearchByQuoteAuthor(quotes []Quote, authorName string) []Quote{
 	var matchingQuotes []Quote
 	authorName = strings.ToLower(strings.TrimSpace(authorName))
 
 	// return quick if empty author
 	if authorName == "" {
-		return matchingQuotes, nil
+		return matchingQuotes
 	}
 
 	// compare author and targetAuthor
@@ -65,7 +63,7 @@ func SearchByQuoteAuthor(quotes []Quote, authorName string) ([]Quote, error) {
 		}
 	}
 
-	return matchingQuotes, nil
+	return matchingQuotes
 }
 
 // LoadQuotesFromFile reads a JSON file from the given filepath,
