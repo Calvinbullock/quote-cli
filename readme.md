@@ -1,3 +1,4 @@
+![Workflow Status](https://github.com/Calvinbullock/quote-cli/actions/workflows/go-ci.yaml/badge.svg)
 # Quote CLI
 
 ## RUNING
