@@ -23,15 +23,7 @@ jobs:
         go-version: '1.22'
 
     - name: Check Go formatting
-      run: |
-        echo "Checking gofmt with -s -d ."
-        diff=$(gofmt -s -d .)
-        if [ -n "$diff" ]; then
-          echo "Go code is not gofmt-ed. Please run 'gofmt -s -w .' on your code."
-          echo "$diff"
-          exit 1
-        fi
-        echo "All Go files are gofmt-ed."
+      run: test -z $(find . -name "*.go" | xargs gofmt -s -l)
 
   test: # Existing test job, now depends on fmt
     runs-on: ubuntu-latest

@@ -22,17 +22,17 @@ type Quote struct {
 // Errors are reserved for unexpected issues during the search process itself.
 func SearchByQuoteTag(quotes []Quote, targetTag string) ([]Quote, error) {
 	var matchingQuotes []Quote
-	processedTargetTag := strings.ToLower(strings.TrimSpace(targetTag))
+	targetTag = strings.ToLower(strings.TrimSpace(targetTag))
 
 	// return quick if empty tag
-	if processedTargetTag == "" {
+	if targetTag == "" {
 		return []Quote{}, nil
 	}
 
 	// compare tag and targetTag
 	for _, quote := range quotes {
 		for _, quoteTag := range quote.Tags {
-			if strings.ToLower(quoteTag) == processedTargetTag {
+			if strings.ToLower(quoteTag) == targetTag {
 				matchingQuotes = append(matchingQuotes, quote)
 				break
 			}
@@ -55,16 +55,16 @@ func SearchByQuoteTag(quotes []Quote, targetTag string) ([]Quote, error) {
 // Errors are reserved for unexpected issues during the search process itself.
 func SearchByQuoteAuthor(quotes []Quote, authorName string) ([]Quote, error) {
 	var matchingQuotes []Quote
-	processedAuthorName := strings.ToLower(strings.TrimSpace(authorName))
+	authorName = strings.ToLower(strings.TrimSpace(authorName))
 
 	// return quick if empty author
-	if processedAuthorName == "" {
+	if authorName == "" {
 		return []Quote{}, nil
 	}
 
 	// compare author and targetAuthor
 	for _, quote := range quotes {
-		if strings.ToLower(quote.Author) == processedAuthorName {
+		if strings.ToLower(quote.Author) == authorName {
 			matchingQuotes = append(matchingQuotes, quote)
 		}
 	}
