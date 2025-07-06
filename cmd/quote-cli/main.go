@@ -54,7 +54,7 @@ func main() {
 
 	if *quotesTagSearch != "" {
 		// Handle tag search
-		foundQuotes, err := quotes.SearchByQuoteTag(quoteList, *quotesTagSearch)
+		foundQuotes := quotes.SearchByQuoteTag(quoteList, *quotesTagSearch)
 		if err != nil {
 			log.Fatalf("Error with search: %v", err)
 		}
@@ -62,7 +62,7 @@ func main() {
 
 	} else if *quotesAuthorSearch != "" {
 		// Handle Author search
-		foundQuotes, err := quotes.SearchByQuoteAuthor(quoteList, *quotesAuthorSearch)
+		foundQuotes := quotes.SearchByQuoteAuthor(quoteList, *quotesAuthorSearch)
 		if err != nil {
 			log.Fatalf("Error with search: %v", err)
 		}
