@@ -47,7 +47,7 @@ func SearchByQuoteTag(quotes []Quote, targetTag string) []Quote {
 //
 // If the processed authorName is empty, or if no matching quotes are found,
 // an empty (non-nil) slice of quotes is returned
-func SearchByQuoteAuthor(quotes []Quote, authorName string) []Quote{
+func SearchByQuoteAuthor(quotes []Quote, authorName string) []Quote {
 	var matchingQuotes []Quote
 	authorName = strings.ToLower(strings.TrimSpace(authorName))
 

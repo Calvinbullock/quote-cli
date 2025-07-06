@@ -46,15 +46,15 @@ func TestSearchByQuoteTag(t *testing.T) {
 
 	// Define test cases. Each test case has a name, input, and expected output.
 	tests := []struct {
-		name         string
-		quotes       []Quote
-		targetTag    string
+		name           string
+		quotes         []Quote
+		targetTag      string
 		expectedQuotes []Quote
 	}{
 		{
-			name:         "Find single matching quote",
-			quotes:       sampleQuotes,
-			targetTag:    "humor",
+			name:      "Find single matching quote",
+			quotes:    sampleQuotes,
+			targetTag: "humor",
 			expectedQuotes: []Quote{
 				{
 					Text:   "Be yourself; everyone else is already taken.",
@@ -64,9 +64,9 @@ func TestSearchByQuoteTag(t *testing.T) {
 			},
 		},
 		{
-			name:         "Find multiple matching quotes",
-			quotes:       sampleQuotes,
-			targetTag:    "inspiration",
+			name:      "Find multiple matching quotes",
+			quotes:    sampleQuotes,
+			targetTag: "inspiration",
 			expectedQuotes: []Quote{
 				{
 					Text:   "The only way to do great work is to love what you do.",
@@ -81,15 +81,15 @@ func TestSearchByQuoteTag(t *testing.T) {
 			},
 		},
 		{
-			name:         "No matching quotes",
-			quotes:       sampleQuotes,
-			targetTag:    "nonexistent",
+			name:           "No matching quotes",
+			quotes:         sampleQuotes,
+			targetTag:      "nonexistent",
 			expectedQuotes: emptyQuoteList,
 		},
 		{
-			name:         "Case in-sensitive search",
-			quotes:       sampleQuotes,
-			targetTag:    "Inspiration",
+			name:      "Case in-sensitive search",
+			quotes:    sampleQuotes,
+			targetTag: "Inspiration",
 			expectedQuotes: []Quote{
 				{
 					Text:   "The only way to do great work is to love what you do.",
@@ -104,15 +104,15 @@ func TestSearchByQuoteTag(t *testing.T) {
 			},
 		},
 		{
-			name:         "Empty input quotes slice",
-			quotes:       emptyQuoteList,
-			targetTag:    "work",
+			name:           "Empty input quotes slice",
+			quotes:         emptyQuoteList,
+			targetTag:      "work",
 			expectedQuotes: emptyQuoteList,
 		},
 		{
-			name:         "Empty target tag", // Searching for an empty tag
-			quotes:       sampleQuotes,
-			targetTag:    "",
+			name:           "Empty target tag", // Searching for an empty tag
+			quotes:         sampleQuotes,
+			targetTag:      "",
 			expectedQuotes: emptyQuoteList,
 		},
 		{
@@ -191,15 +191,15 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 
 	// Define test cases. Each test case has a name, input, and expected output.
 	tests := []struct {
-		name         string
-		quotes       []Quote
-		authorName   string
+		name           string
+		quotes         []Quote
+		authorName     string
 		expectedQuotes []Quote
 	}{
 		{
-			name:         "Find single matching quote by author",
-			quotes:       sampleQuotes,
-			authorName:   "Oscar Wilde",
+			name:       "Find single matching quote by author",
+			quotes:     sampleQuotes,
+			authorName: "Oscar Wilde",
 			expectedQuotes: []Quote{
 				{
 					Text:   "Be yourself; everyone else is already taken.",
@@ -209,9 +209,9 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 			},
 		},
 		{
-			name:         "Find multiple matching quotes by author",
-			quotes:       sampleQuotes,
-			authorName:   "Steve Jobs",
+			name:       "Find multiple matching quotes by author",
+			quotes:     sampleQuotes,
+			authorName: "Steve Jobs",
 			expectedQuotes: []Quote{
 				{
 					Text:   "The only way to do great work is to love what you do.",
@@ -226,9 +226,9 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 			},
 		},
 		{
-			name:         "Find multiple matching quotes by author (another example)",
-			quotes:       sampleQuotes,
-			authorName:   "William Shakespeare",
+			name:       "Find multiple matching quotes by author (another example)",
+			quotes:     sampleQuotes,
+			authorName: "William Shakespeare",
 			expectedQuotes: []Quote{
 				{
 					Text:   "To be or not to be, that is the question.",
@@ -243,15 +243,15 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 			},
 		},
 		{
-			name:         "No matching quotes by author",
-			quotes:       sampleQuotes,
-			authorName:   "NonExistent Author",
+			name:           "No matching quotes by author",
+			quotes:         sampleQuotes,
+			authorName:     "NonExistent Author",
 			expectedQuotes: emptyQuoteList,
 		},
 		{
-			name:         "Case insensitive search for author",
-			quotes:       sampleQuotes,
-			authorName:   "steve jobs", // Lowercase input
+			name:       "Case insensitive search for author",
+			quotes:     sampleQuotes,
+			authorName: "steve jobs", // Lowercase input
 			expectedQuotes: []Quote{
 				{
 					Text:   "The only way to do great work is to love what you do.",
@@ -266,9 +266,9 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 			},
 		},
 		{
-			name:         "Case insensitive search for author (mixed case input)",
-			quotes:       sampleQuotes,
-			authorName:   "OsCaR wIlDe", // Mixed case input
+			name:       "Case insensitive search for author (mixed case input)",
+			quotes:     sampleQuotes,
+			authorName: "OsCaR wIlDe", // Mixed case input
 			expectedQuotes: []Quote{
 				{
 					Text:   "Be yourself; everyone else is already taken.",
@@ -278,9 +278,9 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 			},
 		},
 		{
-			name:         "Author name with leading/trailing spaces",
-			quotes:       sampleQuotes,
-			authorName:   "  Steve Jobs  ", // Spaces around the name
+			name:       "Author name with leading/trailing spaces",
+			quotes:     sampleQuotes,
+			authorName: "  Steve Jobs  ", // Spaces around the name
 			expectedQuotes: []Quote{
 				{
 					Text:   "The only way to do great work is to love what you do.",
@@ -295,15 +295,15 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 			},
 		},
 		{
-			name:         "Empty input quotes slice",
-			quotes:       emptyQuoteList,
-			authorName:   "Any Author",
+			name:           "Empty input quotes slice",
+			quotes:         emptyQuoteList,
+			authorName:     "Any Author",
 			expectedQuotes: emptyQuoteList,
 		},
 		{
-			name:         "Empty author name", // Searching for an empty author name
-			quotes:       sampleQuotes,
-			authorName:   "",
+			name:           "Empty author name", // Searching for an empty author name
+			quotes:         sampleQuotes,
+			authorName:     "",
 			expectedQuotes: emptyQuoteList,
 		},
 	}
@@ -323,6 +323,7 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 		})
 	}
 }
+
 //				Test - LoadQuotesFromFile
 // ====================================================== \\
 
