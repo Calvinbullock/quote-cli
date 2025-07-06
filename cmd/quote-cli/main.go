@@ -32,37 +32,51 @@ func displayQuote(quote quotes.Quote) {
 
 func main() {
 	// Define Command-Line Flags
-	quotesFilePath := flag.String("file", "_assets/default.json", "Path to the quotes file")
-	quotesTagSearch := flag.String("tag", "", "Tag to search quotes by tags")
-	quotesAuthorSearch := flag.String("author", "", "Tag to search quotes by author")
-	versionFlag := flag.Bool("version", false, "Print application version")
-	flag.Parse() // Parse the flags
+
+	var quotesFilePath string
+	var quotesTagSearch string
+	var quotesAuthorSearch string
+	var versionFlag bool
+
+	// src file
+	flag.StringVar(&quotesFilePath, "file", "_assets/default.json", "Path to the quotes file")
+	flag.StringVar(&quotesFilePath, "f", "_assets/default.json", "Path to the quotes file")
+	//tag
+	flag.StringVar(&quotesTagSearch, "tag", "", "Tag to search quotes for (case-insensitive)")
+	flag.StringVar(&quotesTagSearch, "t", "", "Tag to search quotes for (case-insensitive)")
+	// author
+	flag.StringVar(&quotesAuthorSearch, "author", "", "Author to search quotes for (case-insensitive)")
+	flag.StringVar(&quotesAuthorSearch, "a", "", "Short for --author (case-insensitive)")
+	// version
+	flag.BoolVar(&versionFlag, "version", false, "Print application version")
+	flag.BoolVar(&versionFlag, "v", false, "Print application version")
+	flag.Parse()
 
 	const appVersion = "1.0.0"
 
 	// Display program version
-	if *versionFlag {
+	if versionFlag {
 		fmt.Printf("Quote CLI Version: %s\n", appVersion)
 		return
 	}
 
 	// Load Quotes
-	quoteList, err := quotes.LoadQuotesFromFile(*quotesFilePath)
+	quoteList, err := quotes.LoadQuotesFromFile(quotesFilePath)
 	if err != nil {
 		log.Fatalf("Error loading quotes: %v", err)
 	}
 
-	if *quotesTagSearch != "" {
+	if quotesTagSearch != "" {
 		// Handle tag search
-		foundQuotes := quotes.SearchByQuoteTag(quoteList, *quotesTagSearch)
+		foundQuotes := quotes.SearchByQuoteTag(quoteList, quotesTagSearch)
 		if err != nil {
 			log.Fatalf("Error with search: %v", err)
 		}
 		displayQuoteList(foundQuotes)
 
-	} else if *quotesAuthorSearch != "" {
+	} else if quotesAuthorSearch != "" {
 		// Handle Author search
-		foundQuotes := quotes.SearchByQuoteAuthor(quoteList, *quotesAuthorSearch)
+		foundQuotes := quotes.SearchByQuoteAuthor(quoteList, quotesAuthorSearch)
 		if err != nil {
 			log.Fatalf("Error with search: %v", err)
 		}

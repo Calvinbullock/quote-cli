@@ -11,6 +11,8 @@
  - TODO: 
     - [ ] search by keyword
     - [ ] search by author
+        - [x] search by author basic
+        - [ ] search by partial author basic
     - [ ] Combine Filters (EX: use both --tag and --author search)
     - [ ] add single letter flags (-a = --author, -t = --tag, etc)
     - [ ] limit the total print count (`--limit <number>`)
