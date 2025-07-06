@@ -4,12 +4,66 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
 type Quote struct {
-	Text   	string 	 `json:"text"`
-	Author 	string 	 `json:"author"`
-	Tags	[]string `json:"tags"`
+	Text   string   `json:"text"`
+	Author string   `json:"author"`
+	Tags   []string `json:"tags"`
+}
+
+// SearchByQuoteTag filters a slice of quotes, returning only those that contain
+// the specified targetTag. The search is case-insensitive and ignores leading/trailing
+// whitespace on the targetTag.
+//
+// If the processed targetTag is empty, or if no matching quotes are found,
+// an empty (non-nil) slice of quotes is returned
+func SearchByQuoteTag(quotes []Quote, targetTag string) []Quote {
+	var matchingQuotes []Quote
+	targetTag = strings.ToLower(strings.TrimSpace(targetTag))
+
+	// return quick if empty tag
+	if targetTag == "" {
+		return matchingQuotes
+	}
+
+	// compare tag and targetTag
+	for _, quote := range quotes {
+		for _, quoteTag := range quote.Tags {
+			if strings.ToLower(quoteTag) == targetTag {
+				matchingQuotes = append(matchingQuotes, quote)
+				break
+			}
+		}
+	}
+
+	return matchingQuotes
+}
+
+// SearchByQuoteAuthor filters a slice of quotes, returning only those written by
+// the specified author. The search is case-insensitive and ignores leading/trailing
+// whitespace on the authorName.
+//
+// If the processed authorName is empty, or if no matching quotes are found,
+// an empty (non-nil) slice of quotes is returned
+func SearchByQuoteAuthor(quotes []Quote, authorName string) []Quote {
+	var matchingQuotes []Quote
+	authorName = strings.ToLower(strings.TrimSpace(authorName))
+
+	// return quick if empty author
+	if authorName == "" {
+		return matchingQuotes
+	}
+
+	// compare author and targetAuthor
+	for _, quote := range quotes {
+		if strings.ToLower(quote.Author) == authorName {
+			matchingQuotes = append(matchingQuotes, quote)
+		}
+	}
+
+	return matchingQuotes
 }
 
 // LoadQuotesFromFile reads a JSON file from the given filepath,
@@ -23,6 +77,8 @@ type Quote struct {
 //   - The file content is not valid JSON or cannot be unmarshaled into []Quote.
 //   - The JSON file is valid but contains an empty array.
 func LoadQuotesFromFile(filepath string) ([]Quote, error) {
+	// TODO: change tag slices to maps for quick look ups?
+
 	// Read the entire file content
 	data, err := os.ReadFile(filepath)
 	if err != nil {
