@@ -26,7 +26,7 @@ func SearchByQuoteTag(quotes []Quote, targetTag string) ([]Quote, error) {
 
 	// return quick if empty tag
 	if targetTag == "" {
-		return []Quote{}, nil
+		return matchingQuotes, nil
 	}
 
 	// compare tag and targetTag
@@ -37,10 +37,6 @@ func SearchByQuoteTag(quotes []Quote, targetTag string) ([]Quote, error) {
 				break
 			}
 		}
-	}
-
-	if len(matchingQuotes) == 0 {
-		return []Quote{}, nil
 	}
 
 	return matchingQuotes, nil
@@ -59,7 +55,7 @@ func SearchByQuoteAuthor(quotes []Quote, authorName string) ([]Quote, error) {
 
 	// return quick if empty author
 	if authorName == "" {
-		return []Quote{}, nil
+		return matchingQuotes, nil
 	}
 
 	// compare author and targetAuthor
@@ -67,10 +63,6 @@ func SearchByQuoteAuthor(quotes []Quote, authorName string) ([]Quote, error) {
 		if strings.ToLower(quote.Author) == authorName {
 			matchingQuotes = append(matchingQuotes, quote)
 		}
-	}
-
-	if len(matchingQuotes) == 0 {
-		return []Quote{}, nil
 	}
 
 	return matchingQuotes, nil
