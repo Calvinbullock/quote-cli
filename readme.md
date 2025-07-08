@@ -23,7 +23,7 @@ Here's where you can typically find it:
 ```
 
 ## Running / Building
-#### Run with out build
+#### Run without build
 - `go run ./cmd/quote-cli`
 
 #### Build then run
