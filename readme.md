@@ -22,15 +22,20 @@ Here's where you can typically find it:
 ]
 ```
 
-## RUNING
-- `go run ./cmd/quote-cli` - for production
+## Running / Building
+#### Run with out build
+- `go run ./cmd/quote-cli`
 
-#### Manuel Build / run
+#### Build then run
 - `go build -o quote-cli ./cmd/quote-cli` - build the binary
 - `./quote-cli`  - run the binary
 
+#### Other useful cmds
+- `go test ./...`   - run all module tests
+- `gofmt -w .`      - formate all go files
+
 ## plans -- Stories
- - TODO: 
+ - TODO:
     - [ ] search by keyword
     - [ ] search by author
         - [x] search by author basic
