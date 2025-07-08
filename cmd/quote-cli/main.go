@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"path/filepath"
-	"math/rand"
 
 	"quote-cli/internal/quotes"
 	//"quote-cli/internal/display"
@@ -15,11 +15,11 @@ import (
 const appVersion = "1.0.0"
 
 // path for testing
-const defaultFilePath =  "_assets/default.json"
+const defaultFilePath = "_assets/default.json"
 
 // path for real build
 const appConfigRelativePath = "quote-cli"
-const configFileName      = "default.json"
+const configFileName = "default.json"
 
 // getDefaultConfigPath returns the full path to the default configuration file
 // in an OS-idiomatic location.
