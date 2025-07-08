@@ -15,7 +15,7 @@
         - [x] search by author basic
         - [ ] search by partial author basic
     - [ ] Combine Filters (EX: use both --tag and --author search)
-    - [ ] add single letter flags (-a = --author, -t = --tag, etc)
+    - [x] add single letter flags (-a = --author, -t = --tag, etc)
     - [ ] limit the total print count (`--limit <number>`)
     - [ ] add / delete a quote
         - [ ] print all quotes with an ID?

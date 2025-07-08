@@ -4,11 +4,39 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 	"math/rand"
 
 	"quote-cli/internal/quotes"
 	//"quote-cli/internal/display"
 )
+
+const appVersion = "1.0.0"
+
+// path for testing
+const defaultFilePath =  "_assets/default.json"
+
+// path for real build
+const appConfigRelativePath = "quote-cli"
+const configFileName      = "default.json"
+
+// getDefaultConfigPath returns the full path to the default configuration file
+// in an OS-idiomatic location.
+func getDefaultConfigPath() (string, error) {
+	// os.UserConfigDir() provides the OS-specific user configuration directory:
+	// - Linux:   $XDG_CONFIG_HOME or $HOME/.config
+	// - macOS:   $HOME/Library/Application Support
+	// - Windows: %APPDATA% (e.g., C:\Users\<user>\AppData\Roaming)
+	configDir, err := os.UserConfigDir()
+	if err != nil {
+		return "", fmt.Errorf("failed to get user config directory: %w", err)
+	}
+
+	// Join the base config directory with your application's folder and then the file name.
+	fullPath := filepath.Join(configDir, appConfigRelativePath, configFileName)
+	return fullPath, nil
+}
 
 // displayQuoteList prints a list of quotes to the console.
 func displayQuoteList(quoteList []quotes.Quote) {
@@ -31,6 +59,13 @@ func displayQuote(quote quotes.Quote) {
 }
 
 func main() {
+	// var filePath = defaultFilePath
+	filePath, err := getDefaultConfigPath()
+	if err != nil {
+		// TODO: figure out what to do with this err...
+		return
+	}
+
 	// Define Command-Line Flags
 	var quotesFilePath string
 	var quotesTagSearch string
@@ -38,8 +73,8 @@ func main() {
 	var versionFlag bool
 
 	// src file
-	flag.StringVar(&quotesFilePath, "file", "_assets/default.json", "Path to the quotes file")
-	flag.StringVar(&quotesFilePath, "f", "_assets/default.json", "Path to the quotes file")
+	flag.StringVar(&quotesFilePath, "file", filePath, "Path to the quotes file")
+	flag.StringVar(&quotesFilePath, "f", filePath, "Path to the quotes file")
 	//tag
 	flag.StringVar(&quotesTagSearch, "tag", "", "Tag to search quotes for (case-insensitive)")
 	flag.StringVar(&quotesTagSearch, "t", "", "Tag to search quotes for (case-insensitive)")
@@ -50,8 +85,6 @@ func main() {
 	flag.BoolVar(&versionFlag, "version", false, "Print application version")
 	flag.BoolVar(&versionFlag, "v", false, "Print application version")
 	flag.Parse()
-
-	const appVersion = "1.0.0"
 
 	// Display program version
 	if versionFlag {
