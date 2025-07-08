@@ -1,6 +1,27 @@
 ![Workflow Status](https://github.com/Calvinbullock/quote-cli/actions/workflows/go-ci.yml/badge.svg)
 # Quote CLI
 
+## Default quote file location and quote format:
+Here's where you can typically find it:
+- Linux: `$XDG_CONFIG_HOME/quote-cli/default.json` or, if `XDG_CONFIG_HOME` is not set, `~/.config/quote-cli/default.json`
+- macOS: `~/Library/Application Support/quote-cli/default.json`
+- Windows: `%APPDATA%\quote-cli\default.json` (e.g., `C:\Users\<YourUsername>\AppData\Roaming\quote-cli\default.json`)
+
+```
+[
+  {
+    "author": "John F. Kennedy",
+    "text": "A nation that is afraid to let its people judge the truth and falsehood in an open market is a nation that is afraid of its people.",
+    "tags": ["February 26, 1962"]
+  },
+  {
+    "author": null,
+    "text": "To change yourself you must first change your surroundings",
+    "tags": []
+  }
+]
+```
+
 ## RUNING
 - `go run ./cmd/quote-cli` - for production
 
