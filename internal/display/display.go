@@ -89,9 +89,9 @@ func wrapText(text string, width int) string {
 // ====================================================== \\
 
 // displayQuoteList prints a list of quotes to the console no fancy formatting.
-func DisplayQuoteListSimple(quoteList []quotes.Quote) {
+func DisplayQuoteListWraped(quoteList []quotes.Quote) {
 	for _, quote := range quoteList {
-		DisplayQuoteSimple(quote)
+		DisplayQuoteWraped(quote)
 	}
 }
 
@@ -105,6 +105,19 @@ func DisplayQuoteSimple(quote quotes.Quote) {
 
 // DisplayQuoteWraped prints the quote wrapped to the console width.
 func DisplayQuoteWraped(quote quotes.Quote) {
+	terminalWidth := getTerminalWidth()
+
+	// prep then print the quote
+	fmt.Println("")
+	wrappedQuote := wrapText(quote.Text, terminalWidth-4) // Subtract a bit for padding/border
+	fmt.Printf("“%s”\n", wrappedQuote)
+	fmt.Printf("  - %s\n", quote.Author)
+	fmt.Println("")
+}
+
+
+// DisplayQuoteWrapedBox prints the quote wrapped to the console width.
+func DisplayQuoteWrapedBox(quote quotes.Quote) {
 	terminalWidth := getTerminalWidth()
 
 	// prep then print the quote

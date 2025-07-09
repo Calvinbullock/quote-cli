@@ -84,7 +84,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error with search: %v", err)
 		}
-		display.DisplayQuoteListSimple(foundQuotes)
+		display.DisplayQuoteListWraped(foundQuotes)
 
 	} else if quotesAuthorSearch != "" {
 		// Handle Author search
@@ -92,7 +92,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error with search: %v", err)
 		}
-		display.DisplayQuoteListSimple(foundQuotes)
+		display.DisplayQuoteListWraped(foundQuotes)
 
 	} else {
 		// Display Random Quote
