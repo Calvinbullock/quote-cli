@@ -114,16 +114,3 @@ func DisplayQuoteWraped(quote quotes.Quote) {
 	fmt.Printf("  - %s\n", quote.Author)
 	fmt.Println("")
 }
-
-
-// DisplayQuoteWrapedBox prints the quote wrapped to the console width.
-func DisplayQuoteWrapedBox(quote quotes.Quote) {
-	terminalWidth := getTerminalWidth()
-
-	// prep then print the quote
-	fmt.Println("")
-	wrappedQuote := wrapText(quote.Text, terminalWidth-4) // Subtract a bit for padding/border
-	fmt.Printf("“%s”\n", wrappedQuote)
-	fmt.Printf("  - %s\n", quote.Author)
-	fmt.Println("")
-}
