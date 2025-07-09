@@ -8,8 +8,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"quote-cli/internal/quotes"
 	"quote-cli/internal/display"
+	"quote-cli/internal/quotes"
 )
 
 const appVersion = "1.0.0"

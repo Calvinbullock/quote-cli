@@ -1,10 +1,10 @@
 package display
 
 import (
-	"os"
 	"fmt"
-	"strings"
 	"golang.org/x/term"
+	"os"
+	"strings"
 	"unicode/utf8"
 
 	"quote-cli/internal/quotes"
