@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 
 	"quote-cli/internal/quotes"
-	//"quote-cli/internal/display"
+	"quote-cli/internal/display"
 )
 
 const appVersion = "1.0.0"
@@ -36,26 +36,6 @@ func getDefaultConfigPath() (string, error) {
 	// Join the base config directory with your application's folder and then the file name.
 	fullPath := filepath.Join(configDir, appConfigRelativePath, configFileName)
 	return fullPath, nil
-}
-
-// displayQuoteList prints a list of quotes to the console.
-func displayQuoteList(quoteList []quotes.Quote) {
-	for _, quote := range quoteList {
-		displayQuote(quote)
-	}
-}
-
-// displayQuote prints the quote to the console.
-func displayQuote(quote quotes.Quote) {
-	fmt.Println("")
-	fmt.Printf("“%s”\n", quote.Text)
-
-	if quote.Author == "" {
-		fmt.Printf("  - ? \n")
-	} else {
-		fmt.Printf("  - %s\n", quote.Author)
-	}
-	fmt.Println("")
 }
 
 func main() {
@@ -104,7 +84,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error with search: %v", err)
 		}
-		displayQuoteList(foundQuotes)
+		display.DisplayQuoteListSimple(foundQuotes)
 
 	} else if quotesAuthorSearch != "" {
 		// Handle Author search
@@ -112,11 +92,12 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error with search: %v", err)
 		}
-		displayQuoteList(foundQuotes)
+		display.DisplayQuoteListSimple(foundQuotes)
 
 	} else {
 		// Display Random Quote
 		randomInt := rand.Intn(len(quoteList))
-		displayQuote(quoteList[randomInt])
+		//display.DisplayQuoteSimple(quoteList[randomInt])
+		display.DisplayQuoteWraped(quoteList[randomInt])
 	}
 }
