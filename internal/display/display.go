@@ -36,14 +36,15 @@ func getTerminalWidth() int {
 }
 
 // wrapText wraps the given text to the specified width, ensuring words are not broken.
-func wrapText(text string, width int) string {
-	if width <= 0 {
-		return text
-	}
-
+// retruns an array of lines
+func wrapText(text string, width int) []string {
 	var wrappedLines []string
 	currentLine := ""
 	words := strings.Fields(text)
+
+	if width <= 0 {
+		return append(wrappedLines, text)
+	}
 
 	for _, word := range words {
 		// Calculate the length of the word in runes (Unicode characters)
@@ -81,7 +82,55 @@ func wrapText(text string, width int) string {
 		wrappedLines = append(wrappedLines, currentLine)
 	}
 
-	return strings.Join(wrappedLines, "\n")
+	return wrappedLines
+}
+
+func basicWrapText(text string, width int) string {
+	wrapedLines := wrapText("\t"+text, width)
+	lineReturn := "\""
+
+	for i, line := range wrapedLines {
+		if i != 0 {
+			lineReturn += "\n" + line
+		} else {
+			lineReturn += line
+		}
+	}
+	lineReturn += "\""
+
+	return lineReturn
+}
+
+func complexWrapText(text string, width int) string {
+	wrapedLines := wrapText(text, width-10)
+	returnLine := ""
+
+	for i, line := range wrapedLines {
+		fenceLine := ""
+
+		// start fence
+		if i == 0 {
+			fenceLine += " |     " + line
+		} else {
+			fenceLine += " | " + line
+		}
+
+		// middle
+		for len(fenceLine) < width-1 {
+			fenceLine += " "
+		}
+
+		// end fence
+		if i == len(wrapedLines)-1 {
+			fenceLine += " |"
+		} else {
+			fenceLine += " |\n"
+		}
+
+		returnLine += fenceLine
+	}
+
+	return returnLine
 }
 
 // ====================================================== \\
@@ -98,7 +147,7 @@ func DisplayQuoteListWraped(quoteList []quotes.Quote) {
 // displayQuote prints the quote to the console no fancy formatting.
 func DisplayQuoteSimple(quote quotes.Quote) {
 	fmt.Println("")
-	fmt.Printf("“%s”\n", quote.Text)
+	fmt.Printf("%s\n", quote.Text)
 	fmt.Printf("  - %s\n", quote.Author)
 	fmt.Println("")
 }
@@ -109,8 +158,33 @@ func DisplayQuoteWraped(quote quotes.Quote) {
 
 	// prep then print the quote
 	fmt.Println("")
-	wrappedQuote := wrapText(quote.Text, terminalWidth-4) // Subtract a bit for padding/border
-	fmt.Printf("“%s”\n", wrappedQuote)
+	wrappedQuote := basicWrapText(quote.Text, terminalWidth-4) // Subtract a bit for padding/border
+	fmt.Printf("%s\n", wrappedQuote)
 	fmt.Printf("  - %s\n", quote.Author)
+	fmt.Println("")
+}
+
+// DisplayQuoteWraped prints the quote wrapped to the console width.
+func DisplayQuoteWrapedBoarder(quote quotes.Quote) {
+	terminalWidth := min(getTerminalWidth(), 90) // keep the quote/boarder from getting to long
+	paddingMargin := 4
+	wrappedQuote := complexWrapText(quote.Text, terminalWidth - paddingMargin) // Subtract a bit for padding/border
+
+	capString := " "
+	for range terminalWidth - paddingMargin {
+		capString += "-"
+	}
+
+	author := quote.Author
+	for len(author) < terminalWidth - paddingMargin - 6 {
+		author += " "
+	}
+
+	// prep then print the quote
+	fmt.Println("")
+	fmt.Printf("%s\n", capString)
+	fmt.Printf("%s\n", wrappedQuote)
+	fmt.Printf(" | - %s\n", author + " |")
+	fmt.Printf("%s\n", capString)
 	fmt.Println("")
 }

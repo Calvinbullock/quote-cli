@@ -97,7 +97,7 @@ func main() {
 	} else {
 		// Display Random Quote
 		randomInt := rand.Intn(len(quoteList))
-		//display.DisplayQuoteSimple(quoteList[randomInt])
-		display.DisplayQuoteWraped(quoteList[randomInt])
+		display.DisplayQuoteWrapedBoarder(quoteList[randomInt])
+		//display.DisplayQuoteWraped(quoteList[randomInt])
 	}
 }
