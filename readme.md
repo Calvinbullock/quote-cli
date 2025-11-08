@@ -27,7 +27,7 @@ Here's where you can typically find it:
 - `go run ./cmd/quote-cli`
 
 #### Build then run
-- `go build -o quote-cli ./cmd/quote-cli` - build the binary
+- `go build -o quotecli ./cmd/quote-cli` - build the binary
 - `./quote-cli`  - run the binary
 
 #### Other useful cmds
