@@ -168,7 +168,7 @@ func DisplayQuoteWraped(quote quotes.Quote) {
 func DisplayQuoteWrapedBoarder(quote quotes.Quote) {
 	terminalWidth := min(getTerminalWidth(), 90) // keep the quote/boarder from getting to long
 	paddingMargin := 4
-	wrappedQuote := complexWrapText(quote.Text, terminalWidth - paddingMargin) // Subtract a bit for padding/border
+	wrappedQuote := complexWrapText(quote.Text, terminalWidth-paddingMargin) // Subtract a bit for padding/border
 
 	capString := " "
 	for range terminalWidth - paddingMargin {
@@ -176,7 +176,7 @@ func DisplayQuoteWrapedBoarder(quote quotes.Quote) {
 	}
 
 	author := quote.Author
-	for len(author) < terminalWidth - paddingMargin - 6 {
+	for len(author) < terminalWidth-paddingMargin-6 {
 		author += " "
 	}
 
@@ -184,7 +184,7 @@ func DisplayQuoteWrapedBoarder(quote quotes.Quote) {
 	fmt.Println("")
 	fmt.Printf("%s\n", capString)
 	fmt.Printf("%s\n", wrappedQuote)
-	fmt.Printf(" | - %s\n", author + " |")
+	fmt.Printf(" | - %s\n", author+" |")
 	fmt.Printf("%s\n", capString)
 	fmt.Println("")
 }
