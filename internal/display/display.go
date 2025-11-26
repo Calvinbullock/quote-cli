@@ -170,9 +170,7 @@ func DisplayQuoteAdditionPrompt(filePath string) {
 
 	// TODO: check for existing quote
 
-
 	// TODO: if finds match allow exit or addition
-
 
 	// add and catch err
 	err := quotes.AddNewQuote(newText, author, tags, filePath)

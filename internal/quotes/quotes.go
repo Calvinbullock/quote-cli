@@ -100,7 +100,7 @@ func LoadQuotesFromFile(filepath string) ([]Quote, error) {
 }
 
 // Write Json array to file
-func WriteQuoteToFile(quoteList []Quote, filePath string) (error){
+func WriteQuoteToFile(quoteList []Quote, filePath string) error {
 	// concert to byte slice
 	jsonData, err := json.MarshalIndent(quoteList, "", "\t")
 	if err != nil {
@@ -117,11 +117,11 @@ func WriteQuoteToFile(quoteList []Quote, filePath string) (error){
 	return nil
 }
 
-func AddNewQuote(newQuoteText string, author string, tags []string, filePath string) (error){
-	newQ := Quote {
-		Text: newQuoteText,
+func AddNewQuote(newQuoteText string, author string, tags []string, filePath string) error {
+	newQ := Quote{
+		Text:   newQuoteText,
 		Author: author,
-		Tags: tags,
+		Tags:   tags,
 	}
 	quoteList, err := LoadQuotesFromFile(filePath)
 	if err != nil {
