@@ -143,6 +143,10 @@ func DisplayQuoteAdditionPrompt(filePath string) {
 	newText := ""
 	fmt.Print("Enter your quote: ")
 	fmt.Scanln(&newText)
+	if len(newText) <= 0 {
+		fmt.Println("No new quote added")
+		return
+	}
 
 	// enter author
 	author := ""
