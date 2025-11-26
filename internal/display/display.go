@@ -137,6 +137,46 @@ func complexWrapText(text string, width int) string {
 //	std Out Display Functions
 // ====================================================== \\
 
+func DisplayQuoteAdditionPrompt(filePath string) {
+
+	// enter quote text
+	newText := ""
+	fmt.Print("Enter your quote: ")
+	fmt.Scanln(&newText)
+
+	// enter author
+	author := ""
+	fmt.Print("Enter author name: ")
+	fmt.Scanln(&author)
+
+	// add tags
+	tags := []string{}
+	noQuite := true
+	for noQuite {
+		newTag := ""
+		fmt.Print("Enter quote tag (type Done to exit): ")
+		fmt.Scanln(&newTag)
+
+		if strings.ToLower(newTag) == "done" {
+			noQuite = false
+		} else {
+			tags = append(tags, newTag)
+		}
+	}
+
+	// TODO: check for existing quote
+
+
+	// TODO: if finds match allow exit or addition
+
+
+	// add and catch err
+	err := quotes.AddNewQuote(newText, author, tags, filePath)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
 // displayQuoteList prints a list of quotes to the console no fancy formatting.
 func DisplayQuoteListWraped(quoteList []quotes.Quote) {
 	for _, quote := range quoteList {
@@ -146,10 +186,8 @@ func DisplayQuoteListWraped(quoteList []quotes.Quote) {
 
 // displayQuote prints the quote to the console no fancy formatting.
 func DisplayQuoteSimple(quote quotes.Quote) {
-	fmt.Println("")
 	fmt.Printf("%s\n", quote.Text)
 	fmt.Printf("  - %s\n", quote.Author)
-	fmt.Println("")
 }
 
 // DisplayQuoteWraped prints the quote wrapped to the console width.
@@ -157,11 +195,9 @@ func DisplayQuoteWraped(quote quotes.Quote) {
 	terminalWidth := getTerminalWidth()
 
 	// prep then print the quote
-	fmt.Println("")
 	wrappedQuote := basicWrapText(quote.Text, terminalWidth-4) // Subtract a bit for padding/border
 	fmt.Printf("%s\n", wrappedQuote)
 	fmt.Printf("  - %s\n", quote.Author)
-	fmt.Println("")
 }
 
 // DisplayQuoteWraped prints the quote wrapped to the console width.
@@ -181,10 +217,8 @@ func DisplayQuoteWrapedBoarder(quote quotes.Quote) {
 	}
 
 	// prep then print the quote
-	fmt.Println("")
 	fmt.Printf("%s\n", capString)
 	fmt.Printf("%s\n", wrappedQuote)
 	fmt.Printf(" | - %s\n", author+" |")
 	fmt.Printf("%s\n", capString)
-	fmt.Println("")
 }
