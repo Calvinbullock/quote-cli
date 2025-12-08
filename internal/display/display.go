@@ -1,11 +1,13 @@
 package display
 
 import (
+	"bufio"
 	"fmt"
-	"golang.org/x/term"
 	"os"
 	"strings"
 	"unicode/utf8"
+
+	"golang.org/x/term"
 
 	"quote-cli/internal/quotes"
 )
@@ -137,29 +139,55 @@ func complexWrapText(text string, width int) string {
 //	std Out Display Functions
 // ====================================================== \\
 
-func DisplayQuoteAdditionPrompt(filePath string) {
-
-	// enter quote text
+// child func of DisplayQuoteAdditionPrompt
+func readQuote() string {
 	newText := ""
 	fmt.Print("Enter your quote: ")
-	fmt.Scanln(&newText)
-	if len(newText) <= 0 {
-		fmt.Println("No new quote added")
-		return
-	}
 
-	// enter author
+	// read line
+	reader := bufio.NewReader(os.Stdin)
+	newText, err := reader.ReadString('\n')
+	if err != nil {
+		fmt.Println("Error reading quote input:", err)
+		return ""
+	}
+	newText = strings.TrimSuffix(newText, "\n")
+
+	return newText
+}
+
+// child func of DisplayQuoteAdditionPrompt
+func readAuthor() string {
 	author := ""
 	fmt.Print("Enter author name: ")
-	fmt.Scanln(&author)
 
-	// add tags
+	// read line
+	reader := bufio.NewReader(os.Stdin)
+	author, err := reader.ReadString('\n')
+	if err != nil {
+		fmt.Println("Error reading author input:", err)
+		return ""
+	}
+	author = strings.TrimSuffix(author, "\n")
+
+	return author
+}
+
+// child func of DisplayQuoteAdditionPrompt
+func readTags() []string {
 	tags := []string{}
 	noQuite := true
 	for noQuite {
 		newTag := ""
 		fmt.Print("Enter quote tag (type Done to exit): ")
-		fmt.Scanln(&newTag)
+
+		// read line
+		reader := bufio.NewReader(os.Stdin)
+		newTag, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println("Error reading quote input:", err)
+		}
+		newTag = strings.TrimSuffix(newTag, "\n")
 
 		if strings.ToLower(newTag) == "done" {
 			noQuite = false
@@ -167,6 +195,19 @@ func DisplayQuoteAdditionPrompt(filePath string) {
 			tags = append(tags, newTag)
 		}
 	}
+
+	return tags
+}
+
+// prompts for the new quote text, author and tags
+func DisplayQuoteAdditionPrompt(filePath string) {
+	newText := readQuote()
+	if len(newText) <= 0 {
+		fmt.Println("No new quote added")
+		return
+	}
+	author := readAuthor()
+	tags := readTags()
 
 	// TODO: check for existing quote
 
