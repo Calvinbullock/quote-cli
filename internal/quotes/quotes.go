@@ -19,7 +19,7 @@ type Quote struct {
 //
 // If the processed targetTag is empty, or if no matching quotes are found,
 // an empty (non-nil) slice of quotes is returned
-func SearchByQuoteTag(quotes []Quote, targetTag string) []Quote {
+func SearchByQuoteTag(quotes []Quote, targetTag string, isExact bool) []Quote {
 	var matchingQuotes []Quote
 	targetTag = strings.ToLower(strings.TrimSpace(targetTag))
 
@@ -31,9 +31,18 @@ func SearchByQuoteTag(quotes []Quote, targetTag string) []Quote {
 	// compare tag and targetTag
 	for _, quote := range quotes {
 		for _, quoteTag := range quote.Tags {
-			if strings.ToLower(quoteTag) == targetTag {
-				matchingQuotes = append(matchingQuotes, quote)
-				break
+			loweredTag := strings.ToLower(quoteTag)
+
+			if isExact {
+				if loweredTag == targetTag {
+					matchingQuotes = append(matchingQuotes, quote)
+					break
+				}
+			} else {
+				if strings.Contains(loweredTag, targetTag) {
+					matchingQuotes = append(matchingQuotes, quote)
+					break
+				}
 			}
 		}
 	}
@@ -47,7 +56,7 @@ func SearchByQuoteTag(quotes []Quote, targetTag string) []Quote {
 //
 // If the processed authorName is empty, or if no matching quotes are found,
 // an empty (non-nil) slice of quotes is returned
-func SearchByQuoteAuthor(quotes []Quote, authorName string) []Quote {
+func SearchByQuoteAuthor(quotes []Quote, authorName string, isExact bool) []Quote {
 	var matchingQuotes []Quote
 	authorName = strings.ToLower(strings.TrimSpace(authorName))
 
@@ -58,7 +67,44 @@ func SearchByQuoteAuthor(quotes []Quote, authorName string) []Quote {
 
 	// compare author and targetAuthor
 	for _, quote := range quotes {
-		if strings.ToLower(quote.Author) == authorName {
+		loweredAuthor := strings.ToLower(quote.Author)
+
+		// exact or partial author match
+		if isExact {
+			if loweredAuthor == authorName {
+				matchingQuotes = append(matchingQuotes, quote)
+			}
+		} else {
+			if strings.Contains(loweredAuthor, authorName) {
+				matchingQuotes = append(matchingQuotes, quote)
+			}
+		}
+	}
+
+	return matchingQuotes
+}
+
+// SearchByQuoteAuthor filters a slice of quotes, returning only those written by
+// the specified author. The search is case-insensitive and ignores leading/trailing
+// whitespace on the authorName.
+//
+// If the processed authorName is empty, or if no matching quotes are found,
+// an empty (non-nil) slice of quotes is returned
+func SearchByPartialQuoteAuthor(quotes []Quote, authorName string) []Quote {
+	var matchingQuotes []Quote
+	authorName = strings.ToLower(strings.TrimSpace(authorName))
+
+	// return quick if empty author
+	if authorName == "" {
+		return matchingQuotes
+	}
+
+	// Pre-allocate memory to avoid multiple small allocations
+	matchingQuotes = make([]Quote, 0, len(quotes)/10) // Guessing 10% match rate
+
+	// compare author and targetAuthor
+	for _, quote := range quotes {
+		if strings.Contains(strings.ToLower(quote.Author), authorName) {
 			matchingQuotes = append(matchingQuotes, quote)
 		}
 	}

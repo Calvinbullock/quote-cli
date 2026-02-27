@@ -37,13 +37,16 @@ Here's where you can typically find it:
 ## plans -- Stories
  - TODO:
     - [ ] search by keyword
-    - [ ] search by author
+    - [x] search by author
         - [x] search by author basic
-        - [ ] search by partial author basic
+        - [x] search by partial author basic **fzy find author**
     - [ ] Combine Filters (EX: use both --tag and --author search)
     - [x] add single letter flags (-a = --author, -t = --tag, etc)
+    - [ ] add flag to print quote tags to terminal with the quote
     - [ ] limit the total print count (`--limit <number>`)
     - [ ] add / delete a quote
+        - [x] add quote
+        - [ ] remove quote
         - [ ] print all quotes with an ID?
     - [ ] different outputs to terminal (basic, json, csv, etc)
     - [ ] favorite a quote

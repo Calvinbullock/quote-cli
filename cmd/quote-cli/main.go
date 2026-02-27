@@ -52,22 +52,26 @@ func main() {
 	var quotesAuthorSearchFlag string
 	var versionFlag bool
 	var quoteAdditionFlag bool
+	var exactMatchFlag bool
 
 	// src file
 	flag.StringVar(&quotesFilePathFlag, "file", filePath, "Path to the quotes file")
 	flag.StringVar(&quotesFilePathFlag, "f", filePath, "Path to the quotes file")
 	//tag search
-	flag.StringVar(&quotesTagSearchFlag, "tag", "", "Tag to search quotes for (case-insensitive)")
-	flag.StringVar(&quotesTagSearchFlag, "t", "", "Tag to search quotes for (case-insensitive)")
+	flag.StringVar(&quotesTagSearchFlag, "tag", "", "Tag to search quotes for (sub-string matching)")
+	flag.StringVar(&quotesTagSearchFlag, "t", "", "Tag to search quotes for")
 	// author search
-	flag.StringVar(&quotesAuthorSearchFlag, "author", "", "Author to search quotes for (case-insensitive)")
-	flag.StringVar(&quotesAuthorSearchFlag, "a", "", "Short for --author (case-insensitive)")
+	flag.StringVar(&quotesAuthorSearchFlag, "author", "", "Author to search quotes for (sub-string matching)")
+	flag.StringVar(&quotesAuthorSearchFlag, "a", "", "Short for --author")
 	// version
 	flag.BoolVar(&versionFlag, "version", false, "Print application version")
 	flag.BoolVar(&versionFlag, "v", false, "Print application version")
 	// add new quote
 	flag.BoolVar(&quoteAdditionFlag, "new", false, "Create new quote")
 	flag.BoolVar(&quoteAdditionFlag, "n", false, "Create new quote")
+	// Exact match toggle
+	flag.BoolVar(&exactMatchFlag, "exact", false, "Enable exact match for author and tag searches (Case-insensitive)")
+	flag.BoolVar(&exactMatchFlag, "e", false, "Short for --exact")
 	flag.Parse()
 
 	// Display program version
@@ -90,8 +94,14 @@ func main() {
 
 	// quote searching
 	if quotesTagSearchFlag != "" {
+		var foundQuotes []quotes.Quote
+
 		// Handle tag search
-		foundQuotes := quotes.SearchByQuoteTag(quoteList, quotesTagSearchFlag)
+		if exactMatchFlag {
+			foundQuotes = quotes.SearchByQuoteTag(quoteList, quotesTagSearchFlag, true)
+		} else {
+			foundQuotes = quotes.SearchByQuoteTag(quoteList, quotesTagSearchFlag, false)
+		}
 		if err != nil {
 			log.Fatalf("Error with search: %v", err)
 		}
@@ -99,7 +109,13 @@ func main() {
 
 	} else if quotesAuthorSearchFlag != "" {
 		// Handle Author search
-		foundQuotes := quotes.SearchByQuoteAuthor(quoteList, quotesAuthorSearchFlag)
+		var foundQuotes []quotes.Quote
+
+		if exactMatchFlag {
+			foundQuotes = quotes.SearchByQuoteAuthor(quoteList, quotesAuthorSearchFlag, true)
+		} else {
+			foundQuotes = quotes.SearchByQuoteAuthor(quoteList, quotesAuthorSearchFlag, false)
+		}
 		if err != nil {
 			log.Fatalf("Error with search: %v", err)
 		}
