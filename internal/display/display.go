@@ -1,11 +1,13 @@
 package display
 
 import (
+	"bufio"
 	"fmt"
-	"golang.org/x/term"
 	"os"
 	"strings"
 	"unicode/utf8"
+
+	"golang.org/x/term"
 
 	"quote-cli/internal/quotes"
 )
@@ -137,6 +139,87 @@ func complexWrapText(text string, width int) string {
 //	std Out Display Functions
 // ====================================================== \\
 
+// child func of DisplayQuoteAdditionPrompt
+func readQuote() string {
+	newText := ""
+	fmt.Print("Enter your quote: ")
+
+	// read line
+	reader := bufio.NewReader(os.Stdin)
+	newText, err := reader.ReadString('\n')
+	if err != nil {
+		fmt.Println("Error reading quote input:", err)
+		return ""
+	}
+	newText = strings.TrimSuffix(newText, "\n")
+
+	return newText
+}
+
+// child func of DisplayQuoteAdditionPrompt
+func readAuthor() string {
+	author := ""
+	fmt.Print("Enter author name: ")
+
+	// read line
+	reader := bufio.NewReader(os.Stdin)
+	author, err := reader.ReadString('\n')
+	if err != nil {
+		fmt.Println("Error reading author input:", err)
+		return ""
+	}
+	author = strings.TrimSuffix(author, "\n")
+
+	return author
+}
+
+// child func of DisplayQuoteAdditionPrompt
+func readTags() []string {
+	tags := []string{}
+	noQuite := true
+	for noQuite {
+		newTag := ""
+		fmt.Print("Enter quote tag (type Done to exit): ")
+
+		// read line
+		reader := bufio.NewReader(os.Stdin)
+		newTag, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println("Error reading quote input:", err)
+		}
+		newTag = strings.TrimSuffix(newTag, "\n")
+
+		if strings.ToLower(newTag) == "done" {
+			noQuite = false
+		} else {
+			tags = append(tags, newTag)
+		}
+	}
+
+	return tags
+}
+
+// prompts for the new quote text, author and tags
+func DisplayQuoteAdditionPrompt(filePath string) {
+	newText := readQuote()
+	if len(newText) <= 0 {
+		fmt.Println("No new quote added")
+		return
+	}
+	author := readAuthor()
+	tags := readTags()
+
+	// TODO: check for existing quote
+
+	// TODO: if finds match allow exit or addition
+
+	// add and catch err
+	err := quotes.AddNewQuote(newText, author, tags, filePath)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
 // displayQuoteList prints a list of quotes to the console no fancy formatting.
 func DisplayQuoteListWraped(quoteList []quotes.Quote) {
 	for _, quote := range quoteList {
@@ -146,10 +229,8 @@ func DisplayQuoteListWraped(quoteList []quotes.Quote) {
 
 // displayQuote prints the quote to the console no fancy formatting.
 func DisplayQuoteSimple(quote quotes.Quote) {
-	fmt.Println("")
 	fmt.Printf("%s\n", quote.Text)
 	fmt.Printf("  - %s\n", quote.Author)
-	fmt.Println("")
 }
 
 // DisplayQuoteWraped prints the quote wrapped to the console width.
@@ -157,11 +238,9 @@ func DisplayQuoteWraped(quote quotes.Quote) {
 	terminalWidth := getTerminalWidth()
 
 	// prep then print the quote
-	fmt.Println("")
 	wrappedQuote := basicWrapText(quote.Text, terminalWidth-4) // Subtract a bit for padding/border
 	fmt.Printf("%s\n", wrappedQuote)
 	fmt.Printf("  - %s\n", quote.Author)
-	fmt.Println("")
 }
 
 // DisplayQuoteWraped prints the quote wrapped to the console width.
@@ -181,10 +260,8 @@ func DisplayQuoteWrapedBoarder(quote quotes.Quote) {
 	}
 
 	// prep then print the quote
-	fmt.Println("")
 	fmt.Printf("%s\n", capString)
 	fmt.Printf("%s\n", wrappedQuote)
 	fmt.Printf(" | - %s\n", author+" |")
 	fmt.Printf("%s\n", capString)
-	fmt.Println("")
 }

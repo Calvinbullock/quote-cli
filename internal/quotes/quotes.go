@@ -98,3 +98,38 @@ func LoadQuotesFromFile(filepath string) ([]Quote, error) {
 
 	return quotes, nil
 }
+
+// Write Json array to file
+func WriteQuoteToFile(quoteList []Quote, filePath string) error {
+	// concert to byte slice
+	jsonData, err := json.MarshalIndent(quoteList, "", "\t")
+	if err != nil {
+		return fmt.Errorf("Error marshalling data to JSON: %v\n", err)
+	}
+
+	// 4. Write the JSON byte slice to the file
+	// os.FileMode(0644) sets the file permissions (read/write for owner, read-only for others).
+	err = os.WriteFile(filePath, jsonData, 0644)
+	if err != nil {
+		return fmt.Errorf("Error writing JSON to file %s: %v\n", filePath, err)
+	}
+
+	return nil
+}
+
+func AddNewQuote(newQuoteText string, author string, tags []string, filePath string) error {
+	newQ := Quote{
+		Text:   newQuoteText,
+		Author: author,
+		Tags:   tags,
+	}
+	quoteList, err := LoadQuotesFromFile(filePath)
+	if err != nil {
+		return err
+	}
+
+	quoteList = append(quoteList, newQ)
+	WriteQuoteToFile(quoteList, filePath)
+
+	return nil
+}

@@ -46,6 +46,8 @@ Here's where you can typically find it:
     - [ ] add / delete a quote
         - [ ] print all quotes with an ID?
     - [ ] different outputs to terminal (basic, json, csv, etc)
+    - [ ] favorite a quote
+    - [ ] colors display
 
 - TDD - TEST DRIVEN!! FROM THE START
 - a program that display's a quote every time I start a terminal or with a cmd and can add new ones with cli tool
