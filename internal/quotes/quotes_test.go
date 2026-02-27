@@ -140,7 +140,7 @@ func TestSearchByQuoteTag(t *testing.T) {
 		// Run each test case as a subtest. This helps in organizing test output.
 		t.Run(tt.name, func(t *testing.T) {
 			// Call the function being tested.
-			actualQuotes := SearchByQuoteTag(tt.quotes, tt.targetTag)
+			actualQuotes := SearchByQuoteTag(tt.quotes, tt.targetTag, true)
 
 			// Compare the actual returned quotes with the expected quotes.
 			// reflect.DeepEqual is used for comparing slices of structs.
@@ -152,6 +152,7 @@ func TestSearchByQuoteTag(t *testing.T) {
 }
 
 // TestSearchByQuoteAuthor tests the SearchByQuoteAuthor function.
+// **(Exact author match).
 func TestSearchByQuoteAuthor(t *testing.T) {
 	// Define a set of sample quotes to use across test cases.
 	// This can be the same set used for TestSearchByQuoteTag.
@@ -313,12 +314,67 @@ func TestSearchByQuoteAuthor(t *testing.T) {
 		// Run each test case as a subtest.
 		t.Run(tt.name, func(t *testing.T) {
 			// Call the function being tested.
-			actualQuotes := SearchByQuoteAuthor(tt.quotes, tt.authorName)
+			actualQuotes := SearchByQuoteAuthor(tt.quotes, tt.authorName, true) // true is the exact match tests
 
 			// Compare the actual returned quotes with the expected quotes.
 			// reflect.DeepEqual is used for comparing slices of structs.
 			if !reflect.DeepEqual(actualQuotes, tt.expectedQuotes) {
 				t.Errorf("SearchByQuoteAuthor() \ngot  = %v, \nwant = %v", actualQuotes, tt.expectedQuotes)
+			}
+		})
+	}
+}
+
+// TestSearchByQuoteAuthor tests the SearchByQuoteAuthor function
+// **(Non-Exact author match).
+func TestSearchByQuoteAuthor_Partial(t *testing.T) {
+	sampleQuotes := []Quote{
+		{Text: "Great work", Author: "Steve Jobs", Tags: []string{"work"}},
+		{Text: "Be yourself", Author: "Oscar Wilde", Tags: []string{"humor"}},
+		{Text: "Innovation", Author: "Steve Jobs", Tags: []string{"work"}},
+		{Text: "Innovation", Author: "Steve Hobs", Tags: []string{"work"}},
+		{Text: "To be", Author: "William Shakespeare", Tags: []string{"drama"}},
+	}
+
+	tests := []struct {
+		name          string
+		authorName    string
+		expectedCount int
+	}{
+		{
+			name:          "Partial match - first name only",
+			authorName:    "Steve",
+			expectedCount: 3, // Should find both Steve Jobs and Steve Hobbs quotes
+		},
+		{
+			name:          "Partial match - last name only",
+			authorName:    "Wilde",
+			expectedCount: 1,
+		},
+		{
+			name:          "Partial match - middle of name",
+			authorName:    "Shake",
+			expectedCount: 1,
+		},
+		{
+			name:          "Partial match - case insensitive",
+			authorName:    "stev",
+			expectedCount: 3,
+		},
+		{
+			name:          "No match - partial string not in list",
+			authorName:    "Elon",
+			expectedCount: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Call with isExact = false
+			actualQuotes := SearchByQuoteAuthor(sampleQuotes, tt.authorName, false)
+
+			if len(actualQuotes) != tt.expectedCount {
+				t.Errorf("%s: got %d quotes, want %d", tt.name, len(actualQuotes), tt.expectedCount)
 			}
 		})
 	}
@@ -474,5 +530,103 @@ func TestLoadQuotesFromFile_InvalidJSONType(t *testing.T) {
 
 	if !foundUnmarshalTypeError {
 		t.Errorf("Expected an error containing *json.UnmarshalTypeError, but did not find it in error chain: %v", err)
+	}
+}
+
+// TestSearchByQuoteTag_Substring tests the SearchByQuoteTag function with substring matching enabled.
+func TestSearchByQuoteTag_Substring(t *testing.T) {
+	sampleQuotes := []Quote{
+		{
+			Text:   "The purpose of our lives is to be happy.",
+			Author: "Dalai Lama",
+			Tags:   []string{"life", "happiness"},
+		},
+		{
+			Text:   "Change your thoughts and you change your world.",
+			Author: "Norman Vincent Peale",
+			Tags:   []string{"self help", "mindset"},
+		},
+		{
+			Text:   "Stay hungry, stay foolish.",
+			Author: "Steve Jobs",
+			Tags:   []string{"inspiration", "tech"},
+		},
+	}
+
+	tests := []struct {
+		name           string
+		quotes         []Quote
+		targetTag      string
+		expectedQuotes []Quote
+	}{
+		{
+			name:      "Match start of tag (li -> life)",
+			quotes:    sampleQuotes,
+			targetTag: "li",
+			expectedQuotes: []Quote{
+				{
+					Text:   "The purpose of our lives is to be happy.",
+					Author: "Dalai Lama",
+					Tags:   []string{"life", "happiness"},
+				},
+			},
+		},
+		{
+			name:      "Match middle of tag (lp -> self help)",
+			quotes:    sampleQuotes,
+			targetTag: "lp",
+			expectedQuotes: []Quote{
+				{
+					Text:   "Change your thoughts and you change your world.",
+					Author: "Norman Vincent Peale",
+					Tags:   []string{"self help", "mindset"},
+				},
+			},
+		},
+		{
+			name:      "Match whole word in multi-word tag (self -> self help)",
+			quotes:    sampleQuotes,
+			targetTag: "self",
+			expectedQuotes: []Quote{
+				{
+					Text:   "Change your thoughts and you change your world.",
+					Author: "Norman Vincent Peale",
+					Tags:   []string{"self help", "mindset"},
+				},
+			},
+		},
+		{
+			name:      "Case-insensitive substring match (INSPIR -> inspiration)",
+			quotes:    sampleQuotes,
+			targetTag: "INSPIR",
+			expectedQuotes: []Quote{
+				{
+					Text:   "Stay hungry, stay foolish.",
+					Author: "Steve Jobs",
+					Tags:   []string{"inspiration", "tech"},
+				},
+			},
+		},
+		{
+			name:           "No match for substring",
+			quotes:         sampleQuotes,
+			targetTag:      "xyz",
+			expectedQuotes: nil, // Or []Quote{} depending on how your slice is initialized
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Note: isExact is set to FALSE here for substring matching
+			actualQuotes := SearchByQuoteTag(tt.quotes, tt.targetTag, false)
+
+			if len(actualQuotes) == 0 && len(tt.expectedQuotes) == 0 {
+				return
+			}
+
+			if !reflect.DeepEqual(actualQuotes, tt.expectedQuotes) {
+				t.Errorf("%s: got %v, want %v", tt.name, actualQuotes, tt.expectedQuotes)
+			}
+		})
 	}
 }
