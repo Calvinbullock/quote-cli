@@ -58,10 +58,10 @@ func main() {
 	flag.StringVar(&quotesFilePathFlag, "file", filePath, "Path to the quotes file")
 	flag.StringVar(&quotesFilePathFlag, "f", filePath, "Path to the quotes file")
 	//tag search
-	flag.StringVar(&quotesTagSearchFlag, "tag", "", "Tag to search quotes for (sub-string matching)")
+	flag.StringVar(&quotesTagSearchFlag, "tag", "", "Tag to search quotes for (sub-string matching, case-insensitive)")
 	flag.StringVar(&quotesTagSearchFlag, "t", "", "Tag to search quotes for")
 	// author search
-	flag.StringVar(&quotesAuthorSearchFlag, "author", "", "Author to search quotes for (sub-string matching)")
+	flag.StringVar(&quotesAuthorSearchFlag, "author", "", "Author to search quotes for (sub-string matching, case-insensitive)")
 	flag.StringVar(&quotesAuthorSearchFlag, "a", "", "Short for --author")
 	// version
 	flag.BoolVar(&versionFlag, "version", false, "Print application version")
@@ -102,6 +102,7 @@ func main() {
 		} else {
 			foundQuotes = quotes.SearchByQuoteTag(quoteList, quotesTagSearchFlag, false)
 		}
+
 		if err != nil {
 			log.Fatalf("Error with search: %v", err)
 		}
@@ -116,6 +117,7 @@ func main() {
 		} else {
 			foundQuotes = quotes.SearchByQuoteAuthor(quoteList, quotesAuthorSearchFlag, false)
 		}
+
 		if err != nil {
 			log.Fatalf("Error with search: %v", err)
 		}
