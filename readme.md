@@ -36,6 +36,7 @@ Here's where you can typically find it:
 
 ## plans -- Stories
  - TODO:
+    - [ ] **Make default.json if not already created**
     - [ ] search by keyword
     - [x] search by author
         - [x] search by author basic
